@@ -69,11 +69,11 @@ sensitivity_exp_run <- function(title, site, exp_list,
                    run_eq = run_eq, dc_exe_in = dc_path100_explore)
 
     # Read the dc_sip.csv file and add a date column
-    temp_summary <- data.table::fread(paste0("./outputs/", i, "_summary.out")) %>%
+    temp_summary <- data.table::fread(paste0("./outputs/", i,"/", i, "_summary.out")) %>%
       Add_dateCol() %>% mutate(scen = i)
-    temp_dc_sip <- read_csv(paste0("./outputs/", i, "_dc_sip.csv")) %>%
+    temp_dc_sip <- read_csv(paste0("./outputs/", i,"/", i, "_dc_sip.csv")) %>%
       Add_dateCol() %>% mutate(scen = i)
-    temp_harvest <- read_csv(paste0("./outputs/", i, "_harvest.csv")) %>%
+    temp_harvest <- read_csv(paste0("./outputs/", i,"/", i, "_harvest.csv")) %>%
       Add_dateCol() %>% mutate(scen = i)
     # Combine the data into a single DataFrame
     if(which(i == exp_list) == 1){

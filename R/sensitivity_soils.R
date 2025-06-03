@@ -68,9 +68,9 @@ sensitivity_soils <- function(title, site, scen, exp_list,
     DayCentRunSite(site = site, scen = scen, run_base = run_base, run_eq = run_eq)
 
     # Read the dc_sip.csv file and add a date column
-    temp_dc_sip <- read_csv(paste0("./outputs/", scen, "_dc_sip.csv")) %>%
+    temp_dc_sip <- read_csv(paste0("./outputs/", scen,"/",scen, "_dc_sip.csv")) %>%
       Add_dateCol() %>% mutate(soil = i)
-    temp_harvest <- read_csv(paste0("./outputs/", scen, "_harvest.csv")) %>%
+    temp_harvest <- read_csv(paste0("./outputs/", scen,"/", scen, "_harvest.csv")) %>%
       Add_dateCol() %>% mutate(soil = i)
     # Combine the data into a single Dataframe
     if(which(i == exp_list) == 1){
