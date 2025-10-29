@@ -2,7 +2,7 @@
 % Please edit documentation in R/Add_dateCol.R
 \name{Add_dateCol}
 \alias{Add_dateCol}
-\title{Convert time and day of the year columns to Date}
+\title{Convert time and day of the year columns to Date format}
 \usage{
 Add_dateCol(df, time_col = "time", dayofyr_col = "dayofyr", date_col = "date")
 }
@@ -16,8 +16,8 @@ Add_dateCol(df, time_col = "time", dayofyr_col = "dayofyr", date_col = "date")
 \item{date_col}{character. The name of the new 'Date' column to be created (default is 'date').}
 }
 \value{
-The input dataframe with an added 'Date' column.
+The input data frame with an added 'Date' column.
 }
 \description{
-This function converts the 'time' and 'dayofyr' columns of a dataframe into a proper 'Date' column.
+This function converts the 'time' and 'dayofyr' columns of a data frame into a proper 'Date' column.
 }

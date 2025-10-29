@@ -35,7 +35,6 @@
 #' \item ph1to1h2o_r, interpolated from SSURGO data.
 #' }
 #'
-#'
 #' @examplesIf interactive()
 #' latitude <- 45.7
 #' longitude <- -118.6

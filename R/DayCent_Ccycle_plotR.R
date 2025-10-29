@@ -10,7 +10,17 @@
 #' @return This function returns plots for different categories of the C pool.
 #'
 #' @details
-#' This function was built to be used in the DayCent function.
+#' This function was built to use outputs from a DayCent run to plot carbon pools over a specified period of time.
+#' The output from this function is a list of seven plots:
+#' \itemize{
+#' \item Plot 1: plant carbon stocks
+#' \item Plot 2: litter carbon stocks
+#' \item Plot 3: soil organic carbon stocks
+#' \item Plot 4: rapid turnover of soil carbon stocks
+#' \item Plot 5: total system carbon stocks
+#' \item Plot 6: turnover soil carbon stocks
+#' \item Plot 7: relative turnover of soil carbon stocks
+#' }
 #'
 #' @import tidyverse
 #'
@@ -182,7 +192,7 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
     labs(y = "Rapid turnover soil carbon [g/m2]", x = "Years", title = paste0(scenario," rapid turnover carbon stocks"))
 
   g5 = ggplot()+
-    geom_area(data = data_long%>% filter(plantType == "crop_grass",time>=start_year, time <= end_year),
+    geom_area(data = data_long %>% filter(plantType == "crop_grass",time>=start_year, time <= end_year),
               aes(x = Date, y = Camt, fill = Ccomponent))+
     theme_classic()+
     scale_fill_manual(values = Ccomponent_colors) +
@@ -214,5 +224,5 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
     labs(y = "Relative turnover soil carbon [g/m2]", x = "Years", title = paste0("Delta Carbon ", scenario))
 
 
-  return(list(g1,g2,g3,g4, g5, g6,g7 ))
+  return(list(g1, g2, g3, g4, g5, g6, g7))
 }

@@ -18,5 +18,5 @@ The function returns a message based on the arguments. It will specify if a .bin
 This function checks if a binary file exists for the equilibrium or base DayCent block.
 }
 \details{
-This function is used in "DayCentRunSite" function.
+This function is used in \code{DayCentRunSite} function.
 }

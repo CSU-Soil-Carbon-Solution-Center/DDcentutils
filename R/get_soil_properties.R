@@ -1,6 +1,6 @@
 #' @title Soil property data from SSURGO
 #'
-#' @description This functions queries SSURGO and get soil properties for a specified location using the `soilDB` package.
+#' @description This functions queries SSURGO and gets soil properties for a specified location using the `soilDB` package.
 #' The output is includes data for soil properties needed for a Daycent run.
 #'
 #' @param latitude  numeric. Latitude of the site in decimal degrees.
@@ -14,7 +14,7 @@
 #' between 0 and 200 cm for the top and bottom depth, respectively. Each mapunit may present more than one component.
 #' The function reports data only for the component with the highest percentage for the mapunit at the coordinates of interest.
 #' Below is a short description of the columns returned in the data frame.
-#' For more information, please visit the NRCS website: https://www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo
+#' For more information, please visit the NRCS website: www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo
 #' \itemize{
 #' \item mukey = numeric. Mapunit key.
 #' \item cokey = numeric. Component key.

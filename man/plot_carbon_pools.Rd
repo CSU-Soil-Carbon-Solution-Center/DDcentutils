@@ -22,5 +22,15 @@ This function returns plots for different categories of the C pool.
 This function reads a data frame loaded from the dc_sip file and produces seven narrative plots of the carbon pools over time.
 }
 \details{
-This function was built to be used in the DayCent function.
+This function was built to use outputs from a DayCent run to plot carbon pools over a specified period of time.
+The output from this function is a list of seven plots:
+\itemize{
+\item Plot 1: plant carbon stocks
+\item Plot 2: litter carbon stocks
+\item Plot 3: soil organic carbon stocks
+\item Plot 4: rapid turnover of soil carbon stocks
+\item Plot 5: total system carbon stocks
+\item Plot 6: turnover soil carbon stocks
+\item Plot 7: relative turnover of soil carbon stocks
+}
 }

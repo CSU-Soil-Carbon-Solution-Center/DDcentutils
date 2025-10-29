@@ -8,7 +8,7 @@
 #' @returns The function returns a message based on the arguments. It will specify if a .bin file already exists or if it needs to be created.
 #'
 #' @details
-#' This function is used in "DayCentRunSite" function.
+#' This function is used in `DayCentRunSite` function.
 #'
 #' @export
 noBinFlag <- function(run, runCheck) {
@@ -22,7 +22,7 @@ noBinFlag <- function(run, runCheck) {
     # Continue if the file exists and notify the user
     message(paste0("Notice: The ", run, " was not run, but a ", run, " extended site file was found. Continuing with the process."))
   }else{
-    paste0("Startin the ", run, " run.")
+    paste0("Starting the ", run, " run.")
   }
 
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/addLeapYear.R
 \name{addLeapYear}
 \alias{addLeapYear}
-\title{Leap years}
+\title{Add day 366 to Leap years}
 \usage{
 addLeapYear(data_in)
 }

@@ -30,7 +30,7 @@ adjust_sitepar_srad_elev(
 \item{plot}{logical. If TRUE, plots cloudiness.}
 }
 \value{
-Invisibly returns a data frame with monthly transmission values.
+Invisibly returns a data frame with monthly solar transmission values.
 }
 \description{
 Updates \code{sitepar.in} using NASA POWER cloudiness and elevation/terrain data.

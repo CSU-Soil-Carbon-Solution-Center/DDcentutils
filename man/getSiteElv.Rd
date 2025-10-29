@@ -2,7 +2,7 @@
 % Please edit documentation in R/Elevation.R
 \name{getSiteElv}
 \alias{getSiteElv}
-\title{Elevation}
+\title{Get Elevation for a specific site}
 \usage{
 getSiteElv(lat, lon, site)
 }

@@ -28,7 +28,9 @@
 #'  - dc_sip.csv: Daily evaporation, transpiration, respiration, system C, and NPP.
 #'  - summary.out: Daily climate, trace gas, and heterotrophic respiration.
 #'  - harvest.csv: State of the system at time of harvest.
+#'
 #' These combined files are used to plot variables of interested listed in the function. Combined files for dc_sip and harvest are exported in tabular format (.csv).
+#' The function also returns a list with the DayCent log for each scenario run.
 #'
 #' @examples
 #' \dontrun{
@@ -60,13 +62,21 @@ sensitivity_exp_run <- function(title, site, exp_list,
                                 harvest_var_list = NULL, ...) {
 
   title_no_space <- title %>% gsub(" ", "_",.)
+  logs <- list()
 
   # Run the set of experiments and combine dc_sip data
   for (i in exp_list) {
     # Run the DayCent simulation for the experiment
     print(paste0("Run DayCent with site = ", site, ", scenario = ", i))
-    DayCentRunSite(site = site, scen = i, run_base = run_base,
+    log <- DayCentRunSite(site = site, scen = i, run_base = run_base,
                    run_eq = run_eq, dc_exe_in = dc_path100_explore)
+
+    logs[[i]] <- log
+
+    if(str_detect(log %>% tail(1), "Abnormal")){
+      return(logs)
+      stop()
+    }
 
     # Read the dc_sip.csv file and add a date column
     temp_summary <- data.table::fread(paste0("./outputs/", i,"/", i, "_summary.out")) %>%
@@ -204,4 +214,5 @@ sensitivity_exp_run <- function(title, site, exp_list,
   }
 
   message("Sensitivity figures saved to saved to: ", save_figure_temp_path)
+  return(logs)
 }

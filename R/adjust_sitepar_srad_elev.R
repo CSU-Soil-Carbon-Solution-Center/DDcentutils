@@ -10,7 +10,7 @@
 #' @param output_path string. Output path for updated file. If not given the provided sitepar_path file will be updated.
 #' @param plot logical. If TRUE, plots cloudiness.
 #'
-#' @return Invisibly returns a data frame with monthly transmission values.
+#' @return Invisibly returns a data frame with monthly solar transmission values.
 #'
 #' @export
 adjust_sitepar_srad_elev <- function(lat, lon, start_year = 1985, end_year = 2024,
@@ -22,7 +22,7 @@ adjust_sitepar_srad_elev <- function(lat, lon, start_year = 1985, end_year = 202
   sradadj_vals <- get_monthly_cloudiness(lat, lon, start_year, end_year)
   update_sitepar_sradadj(sitepar_path, sradadj_vals$transmission, output_path)
 
-  terrain_list = get_terrain_attributes(lat, lon, z = 14)
+  terrain_list <- get_terrain_attributes(lat, lon, z = 14)
   update_sitepar_terrain(output_path, terrain_list, output_path)
 
   if (!is.null(output_path)) {

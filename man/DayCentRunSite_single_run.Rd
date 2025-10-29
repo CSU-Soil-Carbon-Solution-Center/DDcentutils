@@ -31,7 +31,7 @@ The function returns a character vector with the log of the DayCent run.
 This function runs DayCent for a single site.
 }
 \details{
-This function uses runDayCent to perform a DayCent run for a single site. Results are exported
+This function uses \code{runDayCent} to perform a DayCent run for a single site. Results are exported
 and saved in the same site folder. This function will run one scenario at a time.
 The bin files are exported and saved in the site folder. Outputs listed in the outfiles.in file are exported and saved in an outputs folder within the site folder.
 }

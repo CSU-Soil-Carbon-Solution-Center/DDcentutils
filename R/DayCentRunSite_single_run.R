@@ -11,7 +11,7 @@
 #' @return The function returns a character vector with the log of the DayCent run.
 #'
 #' @details
-#' This function uses runDayCent to perform a DayCent run for a single site. Results are exported
+#' This function uses `runDayCent` to perform a DayCent run for a single site. Results are exported
 #' and saved in the same site folder. This function will run one scenario at a time.
 #' The bin files are exported and saved in the site folder. Outputs listed in the outfiles.in file are exported and saved in an outputs folder within the site folder.
 #'
@@ -34,10 +34,11 @@ DayCentRunSite_single_run <- function(site, scen,
                       run = run,
                       dc_path100_in = dc_path100_in,
                       single_site_logic = single_site_logic)
-    rename_and_move_output_files(run, paste0("./outputs/",run))
+    rename_and_move_output_files(run, paste0("./outputs/", run))
     print(log %>% tail(1))
     print(paste(site, run, "simulation complete."))
   } else {
     stop(paste0("Error: No '", sch_file, "' file is found. Please ensure it exists."))
   }
+  return(log)
 }

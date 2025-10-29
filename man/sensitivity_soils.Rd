@@ -60,8 +60,10 @@ these outputs correspond to the following variables:
 \itemize{
 \item dc_sip.csv: Daily evaporation, transpiration, respiration, system C, and NPP.
 \item harvest.csv: State of the system at time of harvest.
-These combined files are used to plot variables of interested listed in the function. Combined files for dc_sip and harvest are exported in tabular format (.csv).
 }
+
+These combined files are used to plot variables of interested listed in the function. Combined files for dc_sip and harvest are exported in tabular format (.csv).
+The function also returns a list with the DayCent log for each scenario run.
 }
 \examples{
 \dontrun{

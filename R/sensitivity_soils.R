@@ -25,8 +25,9 @@
 #' these outputs correspond to the following variables:
 #'  - dc_sip.csv: Daily evaporation, transpiration, respiration, system C, and NPP.
 #'  - harvest.csv: State of the system at time of harvest.
-#' These combined files are used to plot variables of interested listed in the function. Combined files for dc_sip and harvest are exported in tabular format (.csv).
 #'
+#' These combined files are used to plot variables of interested listed in the function. Combined files for dc_sip and harvest are exported in tabular format (.csv).
+#' The function also returns a list with the DayCent log for each scenario run.
 #'
 #' @examples
 #' \dontrun{
@@ -57,7 +58,7 @@ sensitivity_soils <- function(title, site, scen, exp_list,
 
   file.copy("./soils.in", "./OGsoils.in")
   title_no_space = title %>% gsub(" ", "_",.)
-
+  logs <- list()
 
   # Run the set of experiments and combine dc_sip data
   for (i in exp_list) {
@@ -65,7 +66,14 @@ sensitivity_soils <- function(title, site, scen, exp_list,
     file.copy(i, "./soils.in", overwrite = T)
     # Run the DayCent simulation for the experiment
     print(paste0("Run DayCent with site = ", site, ", scenario = ", scen, ", soil.in = ", i))
-    DayCentRunSite(site = site, scen = scen, run_base = run_base, run_eq = run_eq)
+    log <- DayCentRunSite(site = site, scen = scen, run_base = run_base, run_eq = run_eq)
+
+    logs[[i]] <- log
+
+    if(str_detect(log %>% tail(1), "Abnormal")){
+      return(logs)
+      stop()
+    }
 
     # Read the dc_sip.csv file and add a date column
     temp_dc_sip <- read_csv(paste0("./outputs/", scen,"/",scen, "_dc_sip.csv")) %>%
@@ -164,4 +172,5 @@ sensitivity_soils <- function(title, site, scen, exp_list,
 
   file.copy("./OGsoils.in", "./soils.in", overwrite = T)
   unlink("./OGsoils.in")
+  return(logs)
 }

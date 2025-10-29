@@ -15,7 +15,7 @@ get_soil_properties(latitude, longitude)
 A data frame with data for soil properties and columns with record identifier information.
 }
 \description{
-This functions queries SSURGO and get soil properties for a specified location using the \code{soilDB} package.
+This functions queries SSURGO and gets soil properties for a specified location using the \code{soilDB} package.
 The output is includes data for soil properties needed for a Daycent run.
 }
 \details{
@@ -24,7 +24,7 @@ using the \code{soilDB} package. Data for specific soil properties are extracted
 between 0 and 200 cm for the top and bottom depth, respectively. Each mapunit may present more than one component.
 The function reports data only for the component with the highest percentage for the mapunit at the coordinates of interest.
 Below is a short description of the columns returned in the data frame.
-For more information, please visit the NRCS website: https://www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo
+For more information, please visit the NRCS website: www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo
 \itemize{
 \item mukey = numeric. Mapunit key.
 \item cokey = numeric. Component key.

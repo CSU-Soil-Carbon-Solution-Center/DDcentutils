@@ -1,4 +1,4 @@
-#' @title Elevation
+#' @title Get Elevation for a specific site
 #'
 #' @description This function retrieves the elevation of a specific site based on its latitude and longitude
 #' using the `elevatr` package. The output includes the elevation, latitude, and longitude of the site.

@@ -1,4 +1,4 @@
-#' @title Leap years
+#' @title Add day 366 to Leap years
 #'
 #' @description This function adds the 366th day for leap years to a dataset. It duplicates the 365th day
 #' for leap years, changes its day of the year (DOY) to 366, and updates the date and month.

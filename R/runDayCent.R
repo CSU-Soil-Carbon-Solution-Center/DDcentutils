@@ -19,7 +19,7 @@ runDayCent <- function(outfiles = "no_outfiles.in", site, run,
                        single_site_logic = FALSE, ...) {
   # Check if required input files exist
   if (!file.exists(outfiles)) {
-    stop("Error: 'no_outfiles.in' file does not exist.")
+    stop(paste0("Error:", outfiles, " file does not exist."))
   }
   if (!file.exists(dc_exe_in)) {
     stop(paste("Error: DayCent executable not found at:", dc_exe_in))
@@ -49,7 +49,7 @@ runDayCent <- function(outfiles = "no_outfiles.in", site, run,
 
   # Run the equilibrium process
   log <- system2(
-    command = dc_exe_in,   # Path to the equilibrium executable
+    command = dc_exe_in,# Path to the equilibrium executable
     args = eq_args,     # Arguments for the equilibrium run
     wait = TRUE,        # Wait for the process to finish
     stdout = TRUE,      # Capture standard output
