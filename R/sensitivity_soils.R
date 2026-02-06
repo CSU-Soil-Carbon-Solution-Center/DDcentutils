@@ -1,14 +1,12 @@
-#' @title Soil sensitivity function
+#' Soil sensitivity function
 #'
-#' @description This function runs a schedule file across a list of soil files. This is a flexible function that allows the user to input lists of variables,
+#' This function runs a schedule file across a list of soil files. This is a flexible function that allows the user to input lists of variables,
 #' and produce plots of the model output (and save to output folder).
 #'
 #' @param title character. Name for output folder and files exported in this function.
 #' @param site character. Site name.
 #' @param scen character. Describes the scenario relative to the schedule file.
 #' @param exp_list character. Vector with one or more names for soil files that will replce soil.in for the soil sensitivity.
-#' @param dc_exe_in Local path to the DayCent executable.
-#' @param dc_path100_in character. Local path to the 100 files folder for DayCent.
 #' @param run_eq logical. Default is FALSE. If TRUE, DayCent runs the equilibrium scenario.
 #' @param run_base logical. Default is FALSE. If TRUE, DayCent runs the base scenario.
 #' @param select_years numeric. Default is NULL. A vector that specifies the time interval (start and end year) for sensitivity analyses.
@@ -25,31 +23,27 @@
 #' these outputs correspond to the following variables:
 #'  - dc_sip.csv: Daily evaporation, transpiration, respiration, system C, and NPP.
 #'  - harvest.csv: State of the system at time of harvest.
-#'
 #' These combined files are used to plot variables of interested listed in the function. Combined files for dc_sip and harvest are exported in tabular format (.csv).
-#' The function also returns a list with the DayCent log for each scenario run.
 #'
-#' @examples
-#' \dontrun{
+#'
+#' @example
+#'  # Paths to DayCent and DDList executables and the 100 files need to be set prior to the sensitivity run
 #' exp <- c("./soils_n16_percent_clay.in", "./soils_n8_percent_clay.in", "./soils_0_percent_clay.in",
 #'            "./soils_8_percent_clay.in", "./soils_16_percent_clay.in" ) # list of schedule files
 #' sensitivity_soils(title = "Wooster clay vs sand grid search",
 #'                    site = "wooster",
 #'                    scen = "cc_nt",
 #'                    exp_list = exp,
-#'                    dc_exe_in = dc_exe, dc_path100_in = dc_path100,
 #'                    select_years = c(2006,2012),
 #'                    dc_var_list = list("aglivc", "NPP"),
 #'                    dc_yr_cummsum_list = NULL,
 #'                    harvest_var_list = NULL)
-#' }
 #'
 #' @import dplyr
 #' @import data.table
 #'
 #' @export
 sensitivity_soils <- function(title, site, scen, exp_list,
-                              dc_exe_in = dc_exe, dc_path100_in = dc_path100,
                               run_eq = FALSE, run_base = FALSE,
                               select_years = NULL,
                               dc_var_list = NULL,
@@ -57,28 +51,25 @@ sensitivity_soils <- function(title, site, scen, exp_list,
                               harvest_var_list = NULL, ...) {
 
   file.copy("./soils.in", "./OGsoils.in")
+  file.copy("./base_extend.100", "./OGbase_extend.100")
   title_no_space = title %>% gsub(" ", "_",.)
-  logs <- list()
+
 
   # Run the set of experiments and combine dc_sip data
   for (i in exp_list) {
 
     file.copy(i, "./soils.in", overwrite = T)
+    overwrite_site_soil_layers(site_in_path = "./base_extend.100",
+                               site_out_path = "./base_extend.100",
+                               soil_in_path = i)
     # Run the DayCent simulation for the experiment
     print(paste0("Run DayCent with site = ", site, ", scenario = ", scen, ", soil.in = ", i))
-    log <- DayCentRunSite(site = site, scen = scen, run_base = run_base, run_eq = run_eq)
-
-    logs[[i]] <- log
-
-    if(str_detect(log %>% tail(1), "Abnormal")){
-      return(logs)
-      stop()
-    }
+    DayCentRunSite(site = site, scen = scen, run_base = run_base, run_eq = run_eq)
 
     # Read the dc_sip.csv file and add a date column
-    temp_dc_sip <- read_csv(paste0("./outputs/", scen, "/", scen, "_dc_sip.csv")) %>%
+    temp_dc_sip <- read_csv(paste0("./outputs/", scen,"/", scen, "_dc_sip.csv")) %>%
       Add_dateCol() %>% mutate(soil = i)
-    temp_harvest <- read_csv(paste0("./outputs/", scen, "/", scen, "_harvest.csv")) %>%
+    temp_harvest <- read_csv(paste0("./outputs/", scen,"/", scen, "_harvest.csv")) %>%
       Add_dateCol() %>% mutate(soil = i)
     # Combine the data into a single Dataframe
     if(which(i == exp_list) == 1){
@@ -96,6 +87,21 @@ sensitivity_soils <- function(title, site, scen, exp_list,
     combined_harvest <- combined_harvest %>% filter(year(date) >= select_years[[1]],
                                                     year(date) <= select_years[[2]])
   }
+
+  levels_order <- c(
+    "./soils_n16_percent_clay.in",
+    "./soils_n8_percent_clay.in",
+    "./soils_0_percent_clay.in",
+    "./soils_8_percent_clay.in",
+    "./soils_16_percent_clay.in"
+  )
+
+  combined_dc_sip <- combined_dc_sip %>%
+    mutate(soil = factor(soil, levels = levels_order))
+
+  combined_harvest <- combined_harvest %>%
+    mutate(soil = factor(soil, levels = levels_order))
+
 
   # Create plots for the specified variables
   p_j <- list()
@@ -170,7 +176,14 @@ sensitivity_soils <- function(title, site, scen, exp_list,
 
   message("Sensitivity figures saved to saved to: ", save_figure_temp_path)
 
+  file.copy("./OGbase_extend.100", "./base_extend.100", overwrite = T)
   file.copy("./OGsoils.in", "./soils.in", overwrite = T)
+
+
+  overwrite_site_soil_layers(site_in_path = "./base_extend.100",
+                             site_out_path = "./base_extend.100",
+                             soil_in_path = "./soils.in")
+
   unlink("./OGsoils.in")
-  return(logs)
+  unlink("./OGbase_extend.100")
 }
