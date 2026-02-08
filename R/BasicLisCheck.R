@@ -7,10 +7,8 @@
 #' @param dc_L100 character. Path to DDlist100 executable
 #' @param lis_vars_path character. Path to outvars list file (e.g., "few_outvars.txt")
 #' @param out_dir character. Output folder (default "outputs")
-#' @param eq_base_start_year numeric. Base start year threshold for labeling (default 1841)
-#' @param exp_start_year numeric. Experiment start year threshold for labeling (default 1963)
-#' @param eq_year_offset numeric. Adjustment used in your lab to shift eq years (default 1841-452)
 #' @param keep_combined logical. Write combined tables to out_dir (default TRUE)
+#'
 #' @return list with: all (df), base_exp (df), exp (df), logs (list)
 build_lis_from_bin <- function(site,
                                run,

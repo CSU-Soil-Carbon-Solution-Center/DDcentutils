@@ -9,8 +9,6 @@ sensitivity_soils(
   site,
   scen,
   exp_list,
-  dc_exe_in = dc_exe,
-  dc_path100_in = dc_path100,
   run_eq = FALSE,
   run_base = FALSE,
   select_years = NULL,
@@ -28,10 +26,6 @@ sensitivity_soils(
 \item{scen}{character. Describes the scenario relative to the schedule file.}
 
 \item{exp_list}{character. Vector with one or more names for soil files that will replce soil.in for the soil sensitivity.}
-
-\item{dc_exe_in}{Local path to the DayCent executable.}
-
-\item{dc_path100_in}{character. Local path to the 100 files folder for DayCent.}
 
 \item{run_eq}{logical. Default is FALSE. If TRUE, DayCent runs the equilibrium scenario.}
 
@@ -60,24 +54,6 @@ these outputs correspond to the following variables:
 \itemize{
 \item dc_sip.csv: Daily evaporation, transpiration, respiration, system C, and NPP.
 \item harvest.csv: State of the system at time of harvest.
-}
-
 These combined files are used to plot variables of interested listed in the function. Combined files for dc_sip and harvest are exported in tabular format (.csv).
-The function also returns a list with the DayCent log for each scenario run.
 }
-\examples{
-\dontrun{
-exp <- c("./soils_n16_percent_clay.in", "./soils_n8_percent_clay.in", "./soils_0_percent_clay.in",
-           "./soils_8_percent_clay.in", "./soils_16_percent_clay.in" ) # list of schedule files
-sensitivity_soils(title = "Wooster clay vs sand grid search",
-                   site = "wooster",
-                   scen = "cc_nt",
-                   exp_list = exp,
-                   dc_exe_in = dc_exe, dc_path100_in = dc_path100,
-                   select_years = c(2006,2012),
-                   dc_var_list = list("aglivc", "NPP"),
-                   dc_yr_cummsum_list = NULL,
-                   harvest_var_list = NULL)
-}
-
 }

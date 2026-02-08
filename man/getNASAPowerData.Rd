@@ -36,6 +36,7 @@ month, maximum and minimum temperature (in degrees Celsius), daily precipitation
 }
 \details{
 The function downloads NASA Power weather data based on a user-specified time interval using data from the Agroclimatology Archive.
+The function then saves the weather file to the working directory ./sites/{site}/{site}_Power.wth in the 9 column format.
 The returned data frame includes the following order necessary for a DayCent run:
 \itemize{
 \item day, corresponds to the day of the month.
@@ -49,7 +50,7 @@ The returned data frame includes the following order necessary for a DayCent run
 These seven variables are required in all weather files regardless of the DayCent version.
 Nonetheless, the returned data frame also includes:
 \itemize{
-\item srad_Wm2, shortwave radiation, in W/m2.
+\item srad_Wm2, shortwave radiation, in langley d−1.
 \item RH2M, relative humidity, in \%.
 \item WS2M, wind speed at 2 meters, in mph.
 }
