@@ -39,6 +39,7 @@ DayCentRunSite <- function(site, scen, run_eq = FALSE, run_base = FALSE,
     run_base = T
     log <- runDayCent(outfiles = "no_outfiles.in",
                       site = site, run = run, dc_path100_in = dc_path100_in)
+    rename_and_move_output_files(run, paste0("./outputs/", run), extensions = extensions)
     if(str_detect(log %>% tail(1), "Abnormal")){
       print(log %>% tail(1))
       return(log)
@@ -54,6 +55,7 @@ DayCentRunSite <- function(site, scen, run_eq = FALSE, run_base = FALSE,
   # Run base simulation if specified
   if (run_base) {
     log <- runDayCent(outfiles = output_base, site = site, run = run, dc_path100_in = dc_path100_in)
+    rename_and_move_output_files(run, paste0("./outputs/", run), extensions = extensions)
     if(str_detect(log %>% tail(1), "Abnormal")){
       print(log %>% tail(1))
       return(log)
@@ -68,7 +70,7 @@ DayCentRunSite <- function(site, scen, run_eq = FALSE, run_base = FALSE,
   sch_file <- paste0("./", site, "_", scen, ".sch")
   if (file.exists(sch_file)) {
     log <- runDayCent(outfiles = output_scen , site = site, run = run, dc_path100_in = dc_path100_in)
-    rename_and_move_output_files(run, paste0("./outputs/", scen), extensions = extensions)
+    rename_and_move_output_files(run, paste0("./outputs/", run), extensions = extensions)
     # add a standard list read fn??? .txt in to .lis out
     print(log %>% tail(1))
     print(paste(site, run, "simulation complete."))
