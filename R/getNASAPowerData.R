@@ -15,7 +15,7 @@
 #'
 #' @details
 #' The function downloads NASA Power weather data based on a user-specified time interval using data from the Agroclimatology Archive.
-#' The function then saves the weather file to the working directory ./sites/{site}/{site}_daymet.wth in the 9 column format.
+#' The function then saves the weather file to the working directory ./sites/{site}/{site}_Power.wth in the 9 column format.
 #' The returned data frame includes the following order necessary for a DayCent run:
 #' \itemize{
 #' \item day, corresponds to the day of the month.
