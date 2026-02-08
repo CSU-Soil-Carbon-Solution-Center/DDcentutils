@@ -63,6 +63,7 @@ getDaymetData <- function(raw_data_path = NULL, site = site,
   #Columns and unit conversions
   weather_data_DayCent <- weather_data %>% mutate(
     day = day(date),
+    monthDay = mday(date),
     month = month(date),
     tmax_C = `tmax (deg c)`,
     tmin_C = `tmin (deg c)`,
@@ -70,9 +71,9 @@ getDaymetData <- function(raw_data_path = NULL, site = site,
     srad_Wm2 = `srad (W/m^2)`, # daily total radiation (MJ/m2/day) = (srad (W/m2) * dayl (s/day)) / l,000,000)
     VPD_kpa_day = `vp (Pa)`/1000 # calVPDfromVP(TAvg_c =(tmax_C+tmin_C)/2, VP_kpA = `vp (Pa)`/1000)
   ) %>%
-    dplyr::select(day, month, year, yday, tmax_C, tmin_C, prcp_cm_day, srad_Wm2, VPD_kpa_day)
+    dplyr::select(day,monthDay, month, year, yday, tmax_C, tmin_C, prcp_cm_day, srad_Wm2, VPD_kpa_day)
 
-  weather_data_DayCent_out = weather_data_DayCent%>%
+  weather_data_DayCent_out = weather_data_DayCent %>%
     select(monthDay,month, year,yday, tmax_C,tmin_C, prcp_cm_day)
   temp_wth_file = here("sites", site, paste0(site, "_daymet.wth"))
   write_delim(weather_data_DayCent_out, file = temp_wth_file,col_names = F)

@@ -61,6 +61,7 @@ getNASAPowerData <- function(raw_data_path = NULL,
   # Updating units and aligning with daycent variable order
   weather_data_DayCent <- weather_data %>% mutate(day = day(YYYYMMDD),
                                                   month = month(YYYYMMDD),
+                                                  monthDay = mday(YYYYMMDD),
                                                   yday = DOY,
                                                   year = YEAR,
                                                   tmax_C = T2M_MAX,
@@ -69,7 +70,7 @@ getNASAPowerData <- function(raw_data_path = NULL,
                                                   RH2M = RH2M,
                                                   srad_Ld = ALLSKY_SFC_SW_DWN*41.67*0.484583, #converting from kwh m2 to W m2 to 1 Langley/day = 0.484583 Watt/m2
                                                   c = WS2M*2.236) %>% # from ms to mph
-    dplyr::select(day, month, year, yday, tmax_C, tmin_C, prcp_cm_day, srad_Wm2, RH2M, WS2M)
+    dplyr::select(day, monthDay, month, year, yday, tmax_C, tmin_C, prcp_cm_day, srad_Wm2, RH2M, WS2M)
 
   #double check that NASA power includes leap years.
 
@@ -77,7 +78,7 @@ getNASAPowerData <- function(raw_data_path = NULL,
   # We could also make this save out another function ind. of source to not have copy/paste code.
 
   weather_data_DayCent_out = weather_data_DayCent%>%
-    select(monthDay,month, year,yday, tmax_C,tmin_C, prcp_cm_day,srad_Ld, RH2M, WS2M)
+    select(monthDay, month, year,yday, tmax_C,tmin_C, prcp_cm_day,srad_Ld, RH2M, WS2M)
   temp_wth_file = here("sites", site, paste0(site, "_Power.wth"))
   write_delim(weather_data_DayCent_out, file = temp_wth_file,col_names = F)
   return(weather_data_DayCent)
