@@ -9,6 +9,8 @@
 #' @param keep_combined logical. Write combined tables to out_dir (default TRUE)
 #'
 #' @return list with: all (df), base_exp (df), exp (df), logs (list)
+#'
+#' @export
 build_lis_from_bin <- function(site,
                                run,
                                dc_L100,
