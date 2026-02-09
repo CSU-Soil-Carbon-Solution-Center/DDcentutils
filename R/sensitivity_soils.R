@@ -26,7 +26,7 @@
 #' These combined files are used to plot variables of interested listed in the function. Combined files for dc_sip and harvest are exported in tabular format (.csv).
 #'
 #'
-#' @example
+#' @examples
 #'  # Paths to DayCent and DDList executables and the 100 files need to be set prior to the sensitivity run
 #' exp <- c("./soils_n16_percent_clay.in", "./soils_n8_percent_clay.in", "./soils_0_percent_clay.in",
 #'            "./soils_8_percent_clay.in", "./soils_16_percent_clay.in" ) # list of schedule files

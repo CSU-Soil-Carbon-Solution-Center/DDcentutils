@@ -2,7 +2,7 @@
 % Please edit documentation in R/BasicLisCheck.R
 \name{build_lis_from_bin}
 \alias{build_lis_from_bin}
-\title{Build .lis files from DayCent .bin outputs (eq, base, exp), read, combine, save, cleanup}
+\title{Build lis files}
 \usage{
 build_lis_from_bin(
   site,
