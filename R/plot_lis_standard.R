@@ -5,6 +5,8 @@
 #' @param run character for titles
 #' @param agb_col character. Column name for aboveground biomass (tries to guess if NULL)
 #' @return list of ggplot objects: p_soc, p_agb
+#'
+#' @export
 plot_lis_standard <- function(lis_df, site = "", run = "", agb_col = 'agcprd') {
 
   # SOC plot expects somsc (g/m2). Convert to Mg/ha: g/m2 * 10 / 1000
