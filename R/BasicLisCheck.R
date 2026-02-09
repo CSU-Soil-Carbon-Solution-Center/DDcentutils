@@ -1,6 +1,5 @@
-# ---- helpers: lis build + plots ---------------------------------------------
-
-#' Build .lis files from DayCent .bin outputs (eq, base, exp), read, combine, save, cleanup
+#' @title Build lis files
+#' @description Build .lis files from DayCent .bin outputs (eq, base, exp), read, combine, save, cleanup
 #'
 #' @param site character. Site name (e.g., "wooster")
 #' @param run character. Experiment/run label used in schedule/run call (e.g., "cc_nt")
@@ -130,7 +129,7 @@ build_lis_from_bin <- function(site,
 }
 
 
-#' Standard plots for lis output: SOC stock + aboveground biomass
+#' @title Standard plots for lis output: SOC stock + aboveground biomass
 #'
 #' @param lis_df data.frame from build_lis_from_bin()$all (or similar)
 #' @param site character for titles
