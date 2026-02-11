@@ -70,7 +70,7 @@ getNASAPowerData <- function(raw_data_path = NULL,
                                                   RH2M = RH2M,
                                                   srad_Ld = ALLSKY_SFC_SW_DWN*41.67*0.484583, #converting from kwh m2 to W m2 to 1 Langley/day = 0.484583 Watt/m2
                                                   c = WS2M*2.236) %>% # from ms to mph
-    dplyr::select(day, monthDay, month, year, yday, tmax_C, tmin_C, prcp_cm_day, srad_Wm2, RH2M, WS2M)
+    dplyr::select(day, monthDay, month, year, yday, tmax_C, tmin_C, prcp_cm_day, srad_Ld, RH2M, WS2M)
 
   #double check that NASA power includes leap years.
 
