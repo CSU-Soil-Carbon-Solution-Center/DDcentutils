@@ -89,7 +89,7 @@ The current directory structure in this package is defined as:
             └── base
             └── {scen}                          ## can be more than one folder per scenario run
                 └── {site}_{scen}_harvest.csv   ## output name defined based on site schedule file name
-<pre>
+</pre>
 
 The names of the project and site folders are user defined. More than
 one site folder within *sites/* is allowed. The input files must follow
@@ -125,7 +125,7 @@ like:
                 └── <strong>wooster</strong>_<strong>cc_nt</strong>_harvest.csv
             └── <strong>cc_ct</strong>
                 └── <strong>wooster</strong>_<strong>cc_ct</strong>_harvest.csv
-<pre>   
+</pre>   
 
 ## How to use this package
 
