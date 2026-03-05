@@ -60,10 +60,12 @@ Nonetheless, the returned data frame also includes:
 }
 \examples{
 # Example usage
+\dontrun{
 lat <- 40.58
 lon <- -105.08
 site <- "Sample Site"
 weather <- getDaymetData(raw_data_path = NULL, site = site,
                           lat = lat, lon = lon, start = 2000, end = 2010)
+}
 
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_lis_standard.R
 \name{plot_lis_standard}
 \alias{plot_lis_standard}
-\title{Standard plots for lis output: SOC stock + aboveground biomass}
+\title{Standard plots for lis output: SOC stock and aboveground biomass}
 \usage{
 plot_lis_standard(lis_df, site = "", run = "", agb_col = "agcprd")
 }
@@ -19,5 +19,5 @@ plot_lis_standard(lis_df, site = "", run = "", agb_col = "agcprd")
 list of ggplot objects: p_soc, p_agb
 }
 \description{
-Standard plots for lis output: SOC stock + aboveground biomass
+Standard plots for lis output: SOC stock and aboveground biomass
 }
