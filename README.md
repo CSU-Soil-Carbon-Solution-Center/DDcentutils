@@ -54,10 +54,14 @@ outputs, we segment the files into library, parameter, data, and output
 file categories, as depicted in the figure below.
 
 <figure>
-<img src="man/figures/daycent_environment.png"
-alt="Figure 1. The DayCent environment." />
-<figcaption aria-hidden="true">Figure 1. The DayCent
-environment.</figcaption>
+
+<img src="man/figures/daycent_environment.png"/>
+
+<figcaption>
+
+Figure 1. The DayCent environment.
+</figcaption>
+
 </figure>
 
 The proposed categories can be described as:
@@ -266,3 +270,68 @@ values. This function will not write repeating parameters like schedule
 events. It writes the modified file to a new output path.
 
 ### 2. Running DayCent
+
+Running the DayCent model requires all the input files identified in
+Figure 1. To facilitate running the model, there are three functions in
+this package:
+
+- **run_DayCent**: builds a command line execution and runs the DayCent
+  model.
+
+<figure>
+
+<img src="man/figures/runDayCent.png" width="60%"/>
+
+<figcaption>
+
+Figure 2. Schematic of the runDayCent function.
+</figcaption>
+
+</figure>
+
+This function runs **one block** at a time, depicted by the gray boxes
+in Fig. 2, and uses the {site}.100 directly. There is an argument
+(single_site_logic) that allows bypassing the spin-up and using an
+existing *{site}\_extend.100* file instead. The *run* argument defines
+the DayCent block. The scenario run name is user defined and must match
+the schedule file name.
+
+- **DayCentRunSite_single_run**: a wrapper function on runDayCent to
+  perform a DayCent run for a single site, one scenario at a time.
+
+<figure>
+
+<img src="man/figures/DayCentRunSite_single_run.png"/>
+
+<figcaption>
+
+Figure 3. Schematic of the DayCentRunSite_single_run function.
+</figcaption>
+
+</figure>
+
+Similar to **runDayCent**, this function runs **one block** at a time,
+depicted by the gray boxes in Fig. 3. This function uses the {site}.100
+file and any outputs exported, as indicated in the *output_scen*
+argument, are saved in folders for each block within the
+*{site}/outputs* folder. The scenario run name is also user defined and
+must match the schedule file name.
+
+- **DayCentRunSite**: a wrapper function on runDayCent to to perform one
+  or more DayCent run blocks (equilibrium, base, and experimental).
+
+<figure>
+
+<img src="man/figures/DayCentRunSite.png"/>
+
+<figcaption>
+
+Figure 4. Schematic of the DayCentRunSite function.
+</figcaption>
+
+</figure>
+
+This function **can run all three blocks** if the *run_eq* and
+*run_base* arguments are TRUE. Running the equilibrium and baseline
+blocks is not required as long as an extended .100 file exists for the
+block you are trying to bypass.
