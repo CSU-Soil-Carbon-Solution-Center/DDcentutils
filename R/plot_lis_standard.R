@@ -1,11 +1,11 @@
-#' @title Standard plots for lis output: SOC stock and aboveground biomass
+#' @title Standard plots for lis output: SOC stock, aboveground biomass, and harvested grain C.
 #'
 #' @param lis_df data.frame. From build_lis_from_bin()$all (or similar).
 #' @param site character. Used for plot titles.
 #' @param run character. Used for plot titles.
-#' @param agb_col character. Column name for aboveground biomass (tries to guess if NULL).
+#' @param agb_col character. Column name for aboveground biomass. Default is "agcprd".
 #'
-#' @return list of ggplot objects: p_soc, p_agb
+#' @return list of ggplot objects: p_soc, p_agb, p_cgrain.
 #'
 #' @import ggplot2
 #'
@@ -15,8 +15,11 @@ plot_lis_standard <- function(lis_df, site = "", run = "", agb_col = 'agcprd') {
   # SOC plot expects somsc (g/m2). Convert to Mg/ha: g/m2 * 10 / 1000
   if (!("somsc" %in% names(lis_df))) stop("plot_lis_standard: 'somsc' not found in lis_df.")
 
-  if (!("agcprd" %in% names(lis_df))) stop("plot_lis_standard: 'agcprd' not found in lis_df.")
+  if (agb_col == 'agcprd' & !("agcprd" %in% names(lis_df))) stop("plot_lis_standard: 'agcprd' not found in lis_df.")
 
+  if (agb_col != 'agcprd' & !(agb_col %in% names(lis_df))) stop(paste0("plot_lis_standard: ", agb_col, " not found in lis_df."))
+
+  if (!("cgrain" %in% names(lis_df))) stop("plot_lis_standard: 'cgrain' not found in lis_df.")
 
   # # try to guess AGB column if not provided
   # if (is.null(agb_col)) {
@@ -43,7 +46,7 @@ plot_lis_standard <- function(lis_df, site = "", run = "", agb_col = 'agcprd') {
   p_agb <- ggplot2::ggplot(lis_df %>%
                              mutate(year = floor(time)) %>%
                              group_by(year, run_period) %>%
-                             summarise(agcprd = max(agcprd))) +
+                             summarise_at(vars(agb_col), max)) +
     ggplot2::geom_line(ggplot2::aes(x = year, y = .data[[agb_col]], color = run_period)) +
     ggplot2::geom_point(ggplot2::aes(x = year, y = .data[[agb_col]], color = run_period), size = 0.8) +
     ggplot2::theme_minimal() +

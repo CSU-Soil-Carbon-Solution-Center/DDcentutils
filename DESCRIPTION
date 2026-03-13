@@ -2,13 +2,13 @@ Package: DDcentutils
 Title: Utilities for DayCent
 Version: 0.1.0
 Year: 2025
-Authors@R: 
-    c(person(given = "Ames", family = "Fowler", email = "ames.fowler@colostate.edu", role = c("aut", "cre")),
+Authors@R: c(
+      person(given = "Ames", family = "Fowler", email = "ames.fowler@colostate.edu", role = c("aut", "cre")),
       person(given = "Ligia", family = "Souza", email = "ligia.souza@colostate.edu", role = c("aut", "ctb")),
-      person(given = "Corinne", family = "Walsh", email = "corinne.walsh@colostate.edu", role = c("aut", "ctb")))
-Description: This package was created by the Ecosystem Modeling and Data Consortium at Colorado State University to be used in DayCent trainings.
-  It provides functions to automated soil, weather, and site file creation, and it also provides a simple DayCent runsystem, 
-  investigative sensitivity functionality and carbon and water balance plotting functions. 
+      person(given = "Corinne", family = "Walsh", email = "corinne.walsh@colostate.edu", role = c("ctb"))
+      )
+Description: DDcentutils is a package created by the Ecosystem Modeling and Data Consortium (EMDC) Team at Colorado State University (CSU) to facilitate the use of the DayCent® model and the visualization of DayCent model run results.
+  It provides functions to automate input file building, DayCent runsystem, investigative sensitivity functionality and carbon and water balance plotting functions. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

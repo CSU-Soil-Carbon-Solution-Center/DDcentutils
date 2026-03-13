@@ -204,7 +204,7 @@ We welcome contributions of additional functions from other data products and cr
 
 #### Updating an existing schedule file
 
-This package includes a simple function, **update_sch**, that reads an existing DayCent schedule file ({site}\_{run}.sch) and replaces one or more parameters (e.g., "Site file name", "Starting year") with new values.
+This package includes a simple function, **update_sch**, that reads an existing DayCent schedule file (*{site}\_{run}.sch*) and replaces one or more parameters (e.g., "Site file name", "Starting year") with new values.
 This function will not write repeating parameters like schedule events.
 It writes the modified file to a new output path.
 
@@ -327,13 +327,14 @@ This function builds five different plots of water balance components from DayCe
 
 #### plot_lis_standard()
 
-This function generates standard plots for SOC stock and aboveground biomass from the *.lis* output.
+This function generates standard plots for SOC stock, aboveground biomass and harvested grain carbon from the *.lis* output.
 
 The required input is built using build_list_from_bin().
 Use this function to create a data frame from the *.lis* file.
-The data frame must include the "somsc" and "agcprd" columns.
-
-In the plot\_\_lis_standard() function, the *abg_col* argument allows the user to select the aboveground column to be plotted.
+The data frame must include the "somsc" and "cgrain" columns.
+The *abg_col* argument allows the user to select the aboveground column to be plotted and must match a column name in the data frame.
+The chosen variable must be included in the variables list when using the *build_list_from_bin()* function.
+If no aboveground biomass column is identified, the function defaults to "agcprd", which must be included in the data frame.
 
 This function builds three different plots:
 
