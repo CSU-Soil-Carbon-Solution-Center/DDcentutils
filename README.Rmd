@@ -252,9 +252,91 @@ The scenario run name is also user defined and must match the schedule file name
 
 <img src="man/figures/DayCentRunSite.png"/>
 
-<figcaption>Figure 4. Schematic of the DayCentRunSite function.</figcaption>
+<figcaption>Figure 4.
+Schematic of the DayCentRunSite function.</figcaption>
 
 </figure>
 
 This function **can run all three blocks** if the *run_eq* and *run_base* arguments are TRUE.
 Running the equilibrium and baseline blocks is not required as long as an extended .100 file exists for the block you are trying to bypass.
+
+### 3. Output visualization
+
+In this package, we offer three functions to facilitate output visualization:
+
+-   plot_carbon_pools()
+-   plot_DayCent_water()
+-   plot_lis_standard()
+
+#### plot_carbon_pools() function
+
+This function reads a data frame loaded from the dc_sip file and produces seven narrative plots of the carbon pools over a specific user-defined period time for a given scenario:
+
+-   Plot 1: plant carbon stocks
+-   Plot 2: litter carbon stocks
+-   Plot 3: soil organic carbon stocks
+-   Plot 4: rapid turnover of soil carbon stocks
+-   Plot 5: total system carbon stocks
+-   Plot 6: total soil carbon above and belowground
+-   Plot 7: relative turnover of soil carbon stocks
+
+This function requires the input data from the dc_sip file in a data.frame format.
+To create the plots, the data frame must have the following columns from the dc_sip output:
+
+-   aglivc: Above ground live carbon for crop/grass
+-   bglivcj: Juvenile fine root live carbon for crop/grass
+-   bglivcm: Mature fine root live carbon for crop/grass
+-   crootc: Coarse root live carbon for forest
+-   fbrchc: Fine branch live carbon for forest
+-   frootcj: Juvenile fine root live carbon for forest
+-   frootcm: Mature fine root live carbon for forest
+-   metabc(1): Carbon in metabolic component of surface litter
+-   metabc(2): Carbon in metabolic component of soil litter
+-   rleavc: Leaf live carbon for forest
+-   rlwodc: Large wood live carbon for forest
+-   som1c(1): Carbon in surface active soil organic matter
+-   som1c(2): Carbon in soil active soil organic matter
+-   som2c(1):Carbon in surface slow soil organic matter
+-   som2c(2): – Carbon in soil slow soil organic matter
+-   som3c: Carbon in passive soil organic matter
+-   stdedc: Standing dead carbon
+-   strucc(1): Carbon in structural component of surface litter
+-   strucc(2): Carbon in structural component of soil litter
+-   wood1c: Dead fine branch carbon
+-   wood2c: Dead large wood carbon
+
+#### plot_DayCent_water()
+
+This package provides functions for visualizing daily water balance data, including inflows, outflows, and storage components, using stacked and faceted plots.
+
+Required inputs are the following specific outfiles from DayCent, which should be found in the *{scen}* folder within the *{site}* folder:
+
+-   watrbal.out: daily water balance
+-   vswc.out: daily volumetric soil water content by layer
+-   wfps.out: daily water filled pore space by layer
+
+This function also requires the *soils.in* file as an input.
+
+This function builds five different plots of water balance components from DayCent outputs:
+
+-   Plot 1: Stacked inflows
+-   Plot 2: Stacked outflows
+-   Plot 3: Soil and snow storage
+-   Plot 4: Faceted inflow-storage-outflow
+-   Plot 5: Combined inflow and outflow
+
+#### plot_lis_standard()
+
+This function generates standard plots for SOC stock and aboveground biomass from the *.lis* output.
+
+The required input is built using build_list_from_bin().
+Use this function to create a data frame from the *.lis* file.
+The data frame must include the "somsc" and "agcprd" columns.
+
+In the plot\_\_lis_standard() function, the *abg_col* argument allows the user to select the aboveground column to be plotted.
+
+This function builds three different plots:
+
+-   Plot 1: SOC stocks
+-   Plot 2: Aboveground biomass C
+-   Plot 3: Harvested grain C
