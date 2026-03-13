@@ -21,7 +21,7 @@ None yet.
 
 ## Breaking changes
 
-Noen yet.
+None yet.
 
 ## Known issues/Limitations
 
