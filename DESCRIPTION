@@ -6,13 +6,13 @@ Authors@R:
     c(person(given = "Ames", family = "Fowler", email = "ames.fowler@colostate.edu", role = c("aut", "cre")),
       person(given = "Ligia", family = "Souza", email = "ligia.souza@colostate.edu", role = c("aut", "ctb")),
       person(given = "Corinne", family = "Walsh", email = "corinne.walsh@colostate.edu", role = c("aut", "ctb")))
-Description: This package was created by the Soil Carbon Solutions Center at Colorado State University to be used in DayCent trainings.
+Description: This package was created by the Ecosystem Modeling and Data Consortium at Colorado State University to be used in DayCent trainings.
   It provides functions to automated soil, weather, and site file creation, and it also provides a simple DayCent runsystem, 
   investigative sensitivity functionality and carbon and water balance plotting functions. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Imports: data.table, daymetr, dplyr, elevatr, ggplot2, here, lubridate, nasapower, readr, sf, soilDB, terra, tidyr, tidyverse
+Imports: dplyr, lubridate, readr, data.table, here, tidyr, ggplot2, RColorBrewer, soilDB, sf, nasapower, terra, elevatr, daymetr
 URL: https://github.com/CSU-Soil-Carbon-Solution-Center/DDcentutils
 BugReports: https://github.com/CSU-Soil-Carbon-Solution-Center/DDcentutils/issues
