@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_lis_standard.R
 \name{plot_lis_standard}
 \alias{plot_lis_standard}
-\title{Standard plots for lis output: SOC stock and aboveground biomass}
+\title{Standard plots for lis output: SOC stock, aboveground biomass, and harvested grain C.}
 \usage{
 plot_lis_standard(lis_df, site = "", run = "", agb_col = "agcprd")
 }
@@ -13,11 +13,11 @@ plot_lis_standard(lis_df, site = "", run = "", agb_col = "agcprd")
 
 \item{run}{character. Used for plot titles.}
 
-\item{agb_col}{character. Column name for aboveground biomass (tries to guess if NULL).}
+\item{agb_col}{character. Column name for aboveground biomass. Default is "agcprd".}
 }
 \value{
-list of ggplot objects: p_soc, p_agb
+list of ggplot objects: p_soc, p_agb, p_cgrain.
 }
 \description{
-Standard plots for lis output: SOC stock and aboveground biomass
+Standard plots for lis output: SOC stock, aboveground biomass, and harvested grain C.
 }
