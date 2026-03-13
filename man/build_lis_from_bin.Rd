@@ -6,7 +6,7 @@
 \usage{
 build_lis_from_bin(
   site,
-  run,
+  scen,
   dc_L100,
   lis_vars = c("som1c(2)", "som2c(2)", "som3c", "somsc", "agcprd", "cgrain"),
   out_dir = "outputs",
@@ -16,7 +16,7 @@ build_lis_from_bin(
 \arguments{
 \item{site}{character. Site name (e.g., "wooster")}
 
-\item{run}{character. Experiment/run label used in schedule/run call (e.g., "cc_nt")}
+\item{scen}{character. Scenario/run label used in schedule/run call (e.g., "cc_nt")}
 
 \item{dc_L100}{character. Path to DDlist100 executable}
 

@@ -26,7 +26,7 @@ DayCentRunSite(
 
 \item{run_base}{logical. Default is FALSE. If TRUE, DayCent runs the base scenario.}
 
-\item{dc_exe_in}{Local path to the DayCent executable.}
+\item{dc_exe_in}{character. Local path to the DayCent executable.}
 
 \item{dc_path100_in}{character. Local path to the 100 files folder for DayCent.}
 

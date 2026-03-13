@@ -30,7 +30,7 @@ The output from this function is a list of seven plots:
 \item Plot 3: soil organic carbon stocks
 \item Plot 4: rapid turnover of soil carbon stocks
 \item Plot 5: total system carbon stocks
-\item Plot 6: turnover soil carbon stocks
+\item Plot 6: total soil carbon above and belowground
 \item Plot 7: relative turnover of soil carbon stocks
 }
 }

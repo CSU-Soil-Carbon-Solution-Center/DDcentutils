@@ -7,13 +7,13 @@
 plot_lis_standard(lis_df, site = "", run = "", agb_col = "agcprd")
 }
 \arguments{
-\item{lis_df}{data.frame from build_lis_from_bin()$all (or similar)}
+\item{lis_df}{data.frame. From build_lis_from_bin()$all (or similar).}
 
-\item{site}{character for titles}
+\item{site}{character. Used for plot titles.}
 
-\item{run}{character for titles}
+\item{run}{character. Used for plot titles.}
 
-\item{agb_col}{character. Column name for aboveground biomass (tries to guess if NULL)}
+\item{agb_col}{character. Column name for aboveground biomass (tries to guess if NULL).}
 }
 \value{
 list of ggplot objects: p_soc, p_agb

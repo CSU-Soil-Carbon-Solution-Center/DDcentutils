@@ -16,7 +16,7 @@ A data frame with data for soil properties and columns with record identifier in
 }
 \description{
 This functions queries SSURGO and gets soil properties for a specified location using the \code{soilDB} package.
-The output is includes data for soil properties needed for a Daycent run.
+The output includes data for soil properties needed for a Daycent run.
 }
 \details{
 The function transforms the latitude and longitude into spatial objects to find the corresponding mapunit key in the SSURGO database
