@@ -1,6 +1,6 @@
-#' Soil sensitivity function
+#' @title Soil sensitivity function
 #'
-#' This function runs a schedule file across a list of soil files. This is a flexible function that allows the user to input lists of variables,
+#' @description This function runs a schedule file across a list of soil files. This is a flexible function that allows the user to input lists of variables,
 #' and produce plots of the model output (and save to output folder).
 #'
 #' @param title character. Name for output folder and files exported in this function.
@@ -41,6 +41,7 @@
 #'
 #' @import dplyr
 #' @import data.table
+#' @import ggplot2
 #'
 #' @export
 sensitivity_soils <- function(title, site, scen, exp_list,

@@ -42,10 +42,11 @@
 #' templatesite <- "test_soils" ## this should be an existing soils.in to be used as a template
 #' soils <- convert_ssurgo_to_daycent(latitude, longitude, site, templatesite) ## the file will be saved in the specified site folder.
 #'
-#' @import dplyr
-#' @import readr
-#' @import data.table
-#' @import here
+#' @importFrom dplyr select %>% rowwise mutate filter left_join
+#' @importFrom tidyr unnest
+#' @importFrom readr write_delim
+#' @importFrom data.table fread
+#' @importFrom here here
 #'
 #' @export
 convert_ssurgo_to_daycent <- function(latitude, longitude, site, templatesite) {

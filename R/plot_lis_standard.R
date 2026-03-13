@@ -1,10 +1,13 @@
-#' @title Standard plots for lis output: SOC stock + aboveground biomass
+#' @title Standard plots for lis output: SOC stock and aboveground biomass
 #'
-#' @param lis_df data.frame from build_lis_from_bin()$all (or similar)
-#' @param site character for titles
-#' @param run character for titles
-#' @param agb_col character. Column name for aboveground biomass (tries to guess if NULL)
+#' @param lis_df data.frame. From build_lis_from_bin()$all (or similar).
+#' @param site character. Used for plot titles.
+#' @param run character. Used for plot titles.
+#' @param agb_col character. Column name for aboveground biomass (tries to guess if NULL).
+#'
 #' @return list of ggplot objects: p_soc, p_agb
+#'
+#' @import ggplot2
 #'
 #' @export
 plot_lis_standard <- function(lis_df, site = "", run = "", agb_col = 'agcprd') {

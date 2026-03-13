@@ -1,9 +1,9 @@
 #' @title Visualizing Daily Water Balance Components
 #'
-#' @description This package provides functions for visualizing daily water balance data,
+#' @description This function provides functions for visualizing daily water balance data,
 #' including inflows, outflows, and storage components, using stacked and faceted plots.
 #'
-#' @param scen character. Path to watrbal.out file.
+#' @param scen character. Path to watrbal.out, vscm.out, and wfps.out file.
 #' @param soildata_file character. Path to soils.in file.
 #'
 #' @return This function returns plots for different water balance components.
@@ -34,8 +34,9 @@
 #'                            soildata_file = soildata_file)
 #'
 #' @import ggplot2
-#' @import dplyr
-#' @import tidyr
+#' @importFrom dplyr select mutate %>% left_join group_by ungroup summarize summarise
+#' @importFrom data.table fread
+#' @importFrom tidyr pivot_longer
 #' @import RColorBrewer
 #'
 #' @export
@@ -57,9 +58,9 @@ plot_DayCent_water <- function(scen = scen,
   }
 
   read_layer_data <- function(file_path){
-    data = fread(file_path)
-    names(data) = c("time", "dayofyr", paste0("Layer_",seq(1,(ncol(data)-2))))
-    data = data %>% Add_dateCol()
+    data <- fread(file_path)
+    names(data) <- c("time", "dayofyr", paste0("Layer_",seq(1,(ncol(data)-2))))
+    data <- data %>% Add_dateCol()
   }
 
   # if(!is.null(years_in))
@@ -73,7 +74,7 @@ plot_DayCent_water <- function(scen = scen,
 
 
   vswcdata_long <- vswcdata %>% pivot_longer(cols = contains("Layer"), names_to = "layer") %>%
-    left_join(soildata)%>%
+    left_join(soildata) %>%
     mutate(
       soil_water_cm = value*thickness_cm,
       layer_num = as.numeric(gsub("Layer_", "", layer)),  # Extract numeric part
@@ -144,14 +145,13 @@ plot_DayCent_water <- function(scen = scen,
     scale_fill_manual(values = color_scheme) + theme_minimal() +
     labs(title = "Cumulative Outflows", y = "Cumulative Water (cm)", x = "Day of Year")
 
-
   # prep storage data
 
   Watbaldata_long3 <- Watbaldata_long2 %>%
     filter(category != "Other") %>%  # Filter first
     rename(time = `#time`)
 
-  Watbaldata_long3 = Watbaldata_long3%>%  # Rename column
+  Watbaldata_long3 <- Watbaldata_long3%>%  # Rename column
     rbind(vswcdata_long %>% mutate(category  = "Storage",
                                    component = layer,
                                    year = year(date),
@@ -216,7 +216,7 @@ plot_DayCent_water <- function(scen = scen,
   # Plot 5: Combined inflow and outflow
   inflow_outflow <- filter(Watbaldata_long2, category %in% c("Inflow", "Outflow")) %>%
     mutate(value = ifelse(category == "Outflow", -value, value)) %>%
-    group_by(date, category) %>% summarize (Value = sum(value),
+    group_by(date, category) %>% summarize(Value = sum(value),
                                             cum_value = sum(cum_value),
                                             wy_cum_value = sum(wy_cum_value))
 

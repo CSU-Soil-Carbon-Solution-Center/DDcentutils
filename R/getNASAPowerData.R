@@ -42,8 +42,10 @@
 #' weather <- getNASAPowerData(raw_data_path = NULL, site = site,
 #'                             lat = lat, lon = lon, start = 2000, end = 2020)
 #'
-#' @import nasapower
-#' @import dplyr
+#' @importFrom nasapower get_power
+#' @importFrom dplyr mutate %>% select
+#' @importFrom here here
+#' @importFrom readr write_delim
 #'
 #' @export
 getNASAPowerData <- function(raw_data_path = NULL,
@@ -77,9 +79,9 @@ getNASAPowerData <- function(raw_data_path = NULL,
   # We could let the use choose between the 7 and 10 column weather file.
   # We could also make this save out another function ind. of source to not have copy/paste code.
 
-  weather_data_DayCent_out = weather_data_DayCent%>%
+  weather_data_DayCent_out <- weather_data_DayCent%>%
     select(monthDay, month, year,yday, tmax_C,tmin_C, prcp_cm_day,srad_Ld, RH2M, WS2M)
-  temp_wth_file = here("sites", site, paste0(site, "_Power.wth"))
+  temp_wth_file <- here("sites", site, paste0(site, "_Power.wth"))
   write_delim(weather_data_DayCent_out, file = temp_wth_file,col_names = F)
   return(weather_data_DayCent)
 

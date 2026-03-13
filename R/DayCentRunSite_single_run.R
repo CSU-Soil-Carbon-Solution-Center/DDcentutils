@@ -15,23 +15,20 @@
 #' and saved in the same site folder. This function will run one scenario at a time.
 #' The bin files are exported and saved in the site folder. Outputs listed in the outfiles.in file are exported and saved in an outputs folder within the site folder.
 #'
-#' @import dplyr
-#'
 #' @export
 DayCentRunSite_single_run <- function(site, scen,
                                       dc_exe_in = dc_exe, dc_path100_in = dc_path100,
                                       output_scen = "basic_outfiles.in",...) {
-  # Run equilibrium simulation if specified
-
   # Run scenario simulation if .sch file exists
   run <- scen
-  sch_file <- paste0( site, "_", scen, ".sch")
-  single_site_logic = T
+  sch_file <- paste0(site, "_", scen, ".sch")
+  single_site_logic <- T
 
-  if (file.exists(sch_file)) {
-    log <- runDayCent(outfiles = output_scen ,
+  if (file.exists(sch_file)){
+    log <- runDayCent(outfiles = output_scen,
                       site = site,
                       run = run,
+                      dc_exe_in = dc_exe_in,
                       dc_path100_in = dc_path100_in,
                       single_site_logic = single_site_logic)
     rename_and_move_output_files(run, paste0("./outputs/", run))
