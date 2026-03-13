@@ -345,7 +345,7 @@ visualization:
 - plot_DayCent_water()
 - plot_lis_standard()
 
-#### plot_carbon_pools() function
+#### plot_carbon_pools()
 
 This function reads a data frame loaded from the dc_sip file and
 produces seven narrative plots of the carbon pools over a specific
