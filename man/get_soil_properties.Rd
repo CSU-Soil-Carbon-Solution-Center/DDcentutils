@@ -49,8 +49,10 @@ For more information, please visit the NRCS website: www.nrcs.usda.gov/resources
 }
 }
 \examples{
+\dontrun{
 lat <- 40.58
 lon <- -105.08
 soils <- get_soil_properties(lat, lon)
+}
 
 }
