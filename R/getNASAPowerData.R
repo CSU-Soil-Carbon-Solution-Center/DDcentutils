@@ -29,23 +29,26 @@
 #' These seven variables are required in all weather files regardless of the DayCent version.
 #' Nonetheless, the returned data frame also includes:
 #' \itemize{
-#' \item srad_Wm2, shortwave radiation, in langley d−1.
+#' \item srad_Wm2, shortwave radiation, in langley d -1.
 #' \item RH2M, relative humidity, in %.
 #' \item WS2M, wind speed at 2 meters, in mph.
 #' }
 #'
 #' @examples
 #' # Example usage
+#' \dontrun{
 #' lat <- 40.58
 #' lon <- -105.08
 #' site <- "Sample Site"
 #' weather <- getNASAPowerData(raw_data_path = NULL, site = site,
 #'                             lat = lat, lon = lon, start = 2000, end = 2020)
+#' }
 #'
 #' @importFrom nasapower get_power
 #' @importFrom dplyr mutate %>% select
 #' @importFrom here here
 #' @importFrom readr write_delim
+#' @import lubridate
 #'
 #' @export
 getNASAPowerData <- function(raw_data_path = NULL,
@@ -55,7 +58,7 @@ getNASAPowerData <- function(raw_data_path = NULL,
   weather_data <- get_power(
     community = "ag",
     pars = c("T2M_MIN", "T2M_MAX", "PRECTOTCORR", "RH2M", "ALLSKY_SFC_SW_DWN", "WS2M" ),
-    # need all the parameters here: Tmin (C), Tmax (C), Prcip (mm/day), RHm (%), ALLSKY_SFC_SW_DWN (W/m²), wind (m/s),
+    # need all the parameters here: Tmin (C), Tmax (C), Prcip (mm/day), RHm (%), ALLSKY_SFC_SW_DWN (W/m2), wind (m/s),
     temporal_api = "daily",
     lonlat = c(lon,lat),
     dates = c(paste0(start, "-01-01"), paste0(end, "-12-31")))

@@ -59,7 +59,7 @@ update_sch <- function(in_sch = "pendleton.sch",
       }
 
       lines[match_index] <- new_line
-      message(sprintf("Updated %s: %s → %s", param, old_line, new_line))
+      message(sprintf("Updated %s: %s -> %s", param, old_line, new_line))
     } else {
       warning(sprintf("Parameter '%s' not found or found multiple times.", param))
       not_found <- c(not_found, param)

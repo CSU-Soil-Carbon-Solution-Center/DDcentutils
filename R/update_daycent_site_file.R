@@ -102,7 +102,7 @@ update_daycent_site_file <- function(site_file_in, site_file_out, param_names, p
     if (length(header_line) == 1) {
       new_header <- paste("*** Climate statistics", wth_file_stats)
       lines[header_line] <- new_header
-      message(sprintf("Updated climate header: %s → %s", "*** Climate parameters", new_header))
+      message(sprintf("Updated climate header: %s -> %s", "*** Climate parameters", new_header))
     } else {
       warning("Could not find unique climate header line to replace.")
     }
@@ -121,7 +121,7 @@ update_daycent_site_file <- function(site_file_in, site_file_out, param_names, p
       old_line <- lines[match_index]
       new_line <- sprintf("%-20.8f %s", value, param)
       lines[match_index] <- new_line
-      message(sprintf("Updated %s: %s → %s", param, old_line, new_line))
+      message(sprintf("Updated %s: %s -> %s", param, old_line, new_line))
     } else {
       warning(sprintf("Parameter '%s' not found or found multiple times.", param))
       not_found <- c(not_found, param)

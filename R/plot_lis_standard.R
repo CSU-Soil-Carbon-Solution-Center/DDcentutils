@@ -37,7 +37,7 @@ plot_lis_standard <- function(lis_df, site = "", run = "", agb_col = 'agcprd') {
     ggplot2::geom_point(ggplot2::aes(x = time, y = somsc * 10 / 1000, color = run_period), size = 0.8) +
     ggplot2::theme_minimal() +
     ggplot2::labs(
-      title = paste(site, run, "SOC stock (0–30 cm) for eq, base, and experiment periods"),
+      title = paste(site, run, "SOC stock (0-30 cm) for eq, base, and experiment periods"),
       x = "Year",
       y = "SOC stock (Mg/ha)",
       color = "Period"
