@@ -27,7 +27,8 @@
 #'
 #'
 #' @examples
-#'  # Paths to DayCent and DDList executables and the 100 files need to be set prior to the sensitivity run
+#' \dontrun{
+#' # Paths to DayCent and DDList executables and the 100 files need to be set prior to the sensitivity run
 #' exp <- c("./soils_n16_percent_clay.in", "./soils_n8_percent_clay.in", "./soils_0_percent_clay.in",
 #'            "./soils_8_percent_clay.in", "./soils_16_percent_clay.in" ) # list of schedule files
 #' sensitivity_soils(title = "Wooster clay vs sand grid search",
@@ -38,7 +39,7 @@
 #'                    dc_var_list = list("aglivc", "NPP"),
 #'                    dc_yr_cummsum_list = NULL,
 #'                    harvest_var_list = NULL)
-#'
+#' }
 #' @import dplyr
 #' @import data.table
 #' @import ggplot2
