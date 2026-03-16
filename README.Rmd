@@ -30,9 +30,12 @@ For more about creating an issue, please visit: <https://docs.github.com/en/issu
 
 Please note that the package does not include access to the DayCent model and its associated library files.
 DayCent is a CSU licensed trademark and subject to the terms of use of the license agreement.
-Users affiliated with a research institution can request access to the model under a non-exclusive, non-commercial license on <https://www.soilcarbonsolutionscenter.com/daycent>.
+Users affiliated with a research or non-profit institution can request free access to the model under a non-exclusive, non-commercial license on <https://www.soilcarbonsolutionscenter.com/daycent>.
 Requests are evaluated on a case-by-case basis and require acknowledging the license's terms of use and sharing basic information about the research project.
-For more information about model access, please visit <https://www.soilcarbonsolutionscenter.com/consortium>.
+Research or non-profit institution can also gain access for all employees at their institution by becoming a member of the EMDC for free <https://www.soilcarbonsolutionscenter.com/consortium.>.
+
+Commercial entities can gain access to the DayCent model under a non-exclusive commercial license.
+For more information about commercial membership, please visit <https://www.soilcarbonsolutionscenter.com/consortium.>.
 
 ## Installation
 
@@ -89,12 +92,12 @@ The current directory structure in this package is defined as:
 ```
 
 The names of the project and site folders are user defined.
-More than one site folder within *sites/* is allowed.
+More than one site folder within *sites/* is supported.
 The input files must follow the pattern identified in the directory tree above, with name convention for sites and scenarios defined by the user.
 Outputs are organized per DayCent block run (equilibrium, baseline, scenario) within the *outputs/* folder.
-More than one scenario folder within *outputs/* is allowed.
+More than one scenario folder within *outputs/* is supported.
 
-Let's use one of the most famous long-term Soil Organic Carbon (SOC) research sites, located in Wooster, Ohio, to understand how the directory structure works.
+Let's use a teaching example for one of the most famous long-term Soil Organic Carbon (SOC) research sites, located in Wooster, Ohio, to understand how the directory structure works.
 Since 1962, this site has hosted comparison trials of no-till and conventional tillage for corn and soybeans (<https://soilfertility.osu.edu/research/long-term-tillage-plots>).
 In this example, this is how the directory tree and file names could look like:
 
@@ -246,7 +249,7 @@ Similar to **runDayCent**, this function runs **one block** at a time, depicted 
 This function uses the {site}.100 file and any outputs exported, as indicated in the *output_scen* argument, are saved in folders for each block within the *{site}/outputs* folder.
 The scenario run name is also user defined and must match the schedule file name.
 
--   **DayCentRunSite**: a wrapper function on runDayCent to to perform one or more DayCent run blocks (equilibrium, base, and experimental).
+-   **DayCentRunSite**: a wrapper function on runDayCent to to perform one or more DayCent run blocks (equilibrium, base, and scenario).
 
 <figure>
 
