@@ -20,11 +20,11 @@ build_lis_from_bin(
 
 \item{dc_L100}{character. Path to DDlist100 executable}
 
+\item{lis_vars}{character. List of variables to be included in the output.}
+
 \item{out_dir}{character. Output folder (default "outputs")}
 
 \item{keep_combined}{logical. Write combined tables to out_dir (default TRUE)}
-
-\item{lis_vars_path}{character. Path to outvars list file (e.g., "few_outvars.txt")}
 }
 \value{
 list with: all (df), base_exp (df), exp (df), logs (list)

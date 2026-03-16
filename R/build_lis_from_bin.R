@@ -5,7 +5,7 @@
 #' @param site character. Site name (e.g., "wooster")
 #' @param scen character. Scenario/run label used in schedule/run call (e.g., "cc_nt")
 #' @param dc_L100 character. Path to DDlist100 executable
-#' @param lis_vars_path character. Path to outvars list file (e.g., "few_outvars.txt")
+#' @param lis_vars character. List of variables to be included in the output.
 #' @param out_dir character. Output folder (default "outputs")
 #' @param keep_combined logical. Write combined tables to out_dir (default TRUE)
 #'
