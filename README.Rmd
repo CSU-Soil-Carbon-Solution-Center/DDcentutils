@@ -32,6 +32,7 @@ Please note that the package does not include access to the DayCent model and it
 DayCent is a CSU licensed trademark and subject to the terms of use of the license agreement.
 Users affiliated with a research or non-profit institution can request free access to the model under a non-exclusive, non-commercial license on <https://www.soilcarbonsolutionscenter.com/daycent>.
 Requests are evaluated on a case-by-case basis and require acknowledging the license's terms of use and sharing basic information about the research project.
+
 Research or non-profit institution can also gain access for all employees at their institution by becoming a member of the EMDC for free <https://www.soilcarbonsolutionscenter.com/consortium.>.
 
 Commercial entities can gain access to the DayCent model under a non-exclusive commercial license.
