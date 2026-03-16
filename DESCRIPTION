@@ -1,6 +1,6 @@
 Package: DDcentutils
 Title: Utilities for DayCent
-Version: 0.1.0
+Version: 0.1.0.9000
 Year: 2025
 Authors@R: c(
       person(given = "Ames", family = "Fowler", email = "ames.fowler@colostate.edu", role = c("aut", "cre")),
