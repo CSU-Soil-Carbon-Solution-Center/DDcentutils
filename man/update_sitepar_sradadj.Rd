@@ -2,7 +2,7 @@
 % Please edit documentation in R/update_sitepar_sradadj.R
 \name{update_sitepar_sradadj}
 \alias{update_sitepar_sradadj}
-\title{Update Site File with New SRADADJ Values}
+\title{Update Sitepar File with New SRADADJ Values}
 \usage{
 update_sitepar_sradadj(file_path, new_sradadj, output_path = NULL)
 }
@@ -17,5 +17,5 @@ update_sitepar_sradadj(file_path, new_sradadj, output_path = NULL)
 Updated lines invisibly or writes to a file.
 }
 \description{
-Replaces 12 \code{sradadj[i]} lines in a site file with new values.
+Replaces 12 \code{sradadj[i]} lines in a sitepar.in file with new values.
 }

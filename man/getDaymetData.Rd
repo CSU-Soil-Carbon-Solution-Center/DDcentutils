@@ -39,6 +39,7 @@ month, maximum and minimum temperature (in degrees Celsius), daily precipitation
 }
 \details{
 The function downloads Daymet weather data based on a user-specified time interval and adds an additional row for day 366 in leap years.
+The function then saves the weather file to the working directory ./sites/{site}/{site}_daymet.wth in the 7 column format.
 More information about Daymet data can be found on: daymet.ornl.gov/overview.
 The returned data frame includes the following variables in the order necessary for a DayCent run:
 \itemize{
@@ -59,10 +60,12 @@ Nonetheless, the returned data frame also includes:
 }
 \examples{
 # Example usage
+\dontrun{
 lat <- 40.58
 lon <- -105.08
 site <- "Sample Site"
 weather <- getDaymetData(raw_data_path = NULL, site = site,
                           lat = lat, lon = lon, start = 2000, end = 2010)
+}
 
 }

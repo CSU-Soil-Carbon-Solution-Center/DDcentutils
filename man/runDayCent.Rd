@@ -19,11 +19,13 @@ runDayCent(
 
 \item{site}{character. Site name.}
 
-\item{run}{character. Describes which DayCent block (equilibrium, base, or experimental) to run based on the schedule file name.}
+\item{run}{character. Describes which DayCent block (equilibrium, baseline, or experimental scenario) to run based on the schedule file name. Accepted arguments are: "eq" for equilibrium, "base" for baseline, or a custom string for the experimental scenario (should match the schedule file name).}
 
 \item{dc_exe_in}{Local path to the DayCent executable.}
 
 \item{dc_path100_in}{character. Local path to the 100 files folder for DayCent.}
+
+\item{single_site_logic}{logical. Bypasses the spin up and directly runs the {site}.100 file. Default is FALSE.}
 }
 \value{
 The function returns a character vector with the log of the DayCent run. The bin and output files are exported and saved in the site folder.

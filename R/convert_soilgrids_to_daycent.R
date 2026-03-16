@@ -43,11 +43,11 @@
 #' templatesite <- "test_soils" ## this should be an existing soils.in to be used as a template
 #' soils <- convert_soilgrids_to_daycent(latitude, longitude, site, templatesite) ## the file will be saved in the specified site folder.
 #'
-#' @import dplyr
-#' @import readr
-#' @import data.table
-#' @import here
-#' @import soilDB
+#' @importFrom dplyr filter %>% group_by summarise select
+#' @importFrom readr write_delim
+#' @importFrom data.table fread
+#' @importFrom here here
+#' @importFrom soilDB fetchSoilGrids
 #'
 #' @export
 convert_soilgrids_to_daycent <- function (latitude, longitude, site, templatesite)

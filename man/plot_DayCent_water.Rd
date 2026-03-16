@@ -7,7 +7,7 @@
 plot_DayCent_water(scen = scen, soildata_file)
 }
 \arguments{
-\item{scen}{character. Path to watrbal.out file.}
+\item{scen}{character. Path to watrbal.out, vscm.out, and wfps.out file.}
 
 \item{soildata_file}{character. Path to soils.in file.}
 }
@@ -15,7 +15,7 @@ plot_DayCent_water(scen = scen, soildata_file)
 This function returns plots for different water balance components.
 }
 \description{
-This package provides functions for visualizing daily water balance data,
+This function provides functions for visualizing daily water balance data,
 including inflows, outflows, and storage components, using stacked and faceted plots.
 }
 \details{

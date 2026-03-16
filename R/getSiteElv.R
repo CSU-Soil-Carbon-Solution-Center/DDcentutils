@@ -24,10 +24,10 @@
 #'
 #' @importFrom sf st_as_sf st_coordinates
 #' @importFrom elevatr get_elev_point
-#' @import dplyr
+#' @importFrom dplyr mutate %>%
 #'
 #' @export
-  getSiteElv <- function(lat, lon, site) {
+getSiteElv <- function(lat, lon, site) {
     # Create a data frame for the site's latitude, longitude, and name
     site_sf <- data.frame(x = lon, # longitude
                           y = lat, # latitude
@@ -37,10 +37,10 @@
     site_sf <- st_as_sf(x = site_sf, coords = c("x", "y"), crs = 4326)
 
     # Retrieve elevation data for the site
-    site_sf = elevatr::get_elev_point(locations = site_sf, prj = 4326)
+    site_sf <- elevatr::get_elev_point(locations = site_sf, prj = 4326)
 
     # Add longitude and latitude columns back into the data
-    site_sf = site_sf %>% mutate(lon = (site_sf %>% st_coordinates())[, 1],
+    site_sf <- site_sf %>% mutate(lon = (site_sf %>% st_coordinates())[, 1],
                                  lat = (site_sf %>% st_coordinates())[, 2])
 
     return(site_sf)

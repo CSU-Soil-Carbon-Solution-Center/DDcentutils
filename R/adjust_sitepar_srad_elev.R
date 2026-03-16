@@ -16,7 +16,7 @@
 adjust_sitepar_srad_elev <- function(lat, lon, start_year = 1985, end_year = 2024,
                                      sitepar_path, output_path = NULL, plot = TRUE) {
   if(is.null(output_path)){
-    output_path = sitepar_path
+    output_path <- sitepar_path
   }
 
   sradadj_vals <- get_monthly_cloudiness(lat, lon, start_year, end_year)

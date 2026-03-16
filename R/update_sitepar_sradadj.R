@@ -1,6 +1,6 @@
-#' @title Update Site File with New SRADADJ Values
+#' @title Update Sitepar File with New SRADADJ Values
 #'
-#' @description Replaces 12 `sradadj[i]` lines in a site file with new values.
+#' @description Replaces 12 `sradadj[i]` lines in a sitepar.in file with new values.
 #'
 #' @param file_path Path to the input sitepar file.
 #' @param new_sradadj A numeric vector of 12 monthly transmission values.

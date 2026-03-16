@@ -18,11 +18,13 @@
 #' \item Plot 3: soil organic carbon stocks
 #' \item Plot 4: rapid turnover of soil carbon stocks
 #' \item Plot 5: total system carbon stocks
-#' \item Plot 6: turnover soil carbon stocks
+#' \item Plot 6: total soil carbon above and belowground
 #' \item Plot 7: relative turnover of soil carbon stocks
 #' }
 #'
-#' @import tidyverse
+#' @import ggplot2
+#' @importFrom dplyr mutate %>% filter group_by
+#' @importFrom tidyr pivot_longer
 #'
 #' @export
 plot_carbon_pools <- function(data, scenario, start_year, end_year){
@@ -52,7 +54,7 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
   # if(length(missing_cols) > 0) {
   #   stop(paste("Missing columns:", paste(missing_cols, collapse=", ")))
   # }
-  required_cols = factor(required_cols,
+  required_cols <- factor(required_cols,
                          levels=c("rleavc","fbrchc","rlwodc","wood1c","wood2c","aglivc","stdedc","metabc(1)","strucc(1)","som1c(1)","som2c(1)",
                                   "bglivcj","bglivcm","crootc","frootcj","frootcm", "strucc(2)","metabc(2)","som1c(2)","som2c(2)","som3c"
                          ))
@@ -95,11 +97,11 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
                     "bglivcj", "bglivcm", "crootc", "frootcj", "frootcm",
                     "strucc(2)", "metabc(2)", "som1c(2)", "som2c(2)", "som3c")
 
-  data_long =data_long%>%
+  data_long <- data_long%>%
     mutate(Ccomponent = Ccomponent %>%
              factor(levels=levels_order,labels = labels))
 
-  data_long =data_long%>%
+  data_long <- data_long%>%
     mutate(Date = as.Date(paste0(time %>% floor(),"-", dayofyr), format = "%Y-%j"))
 
   # Generate shades of colors for each category
@@ -150,7 +152,7 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
   #   geom_hline(yintercept = 0)+
   #   labs(y = "Plant and litter carbon [g/m2]", x = "Years", title = paste0(scenario," plant and litter carbon stocks"))
   #
-  g1 = ggplot()+
+  g1 <- ggplot()+
     geom_area(data = data_long %>% filter( groundType == "aboveGround",cType == "plant", plantType == "crop_grass",time>=start_year, time <= end_year),
               aes(x = Date, y = Camt, fill = Ccomponent))+
     geom_area(data = data_long %>% filter( groundType == "belowGround",cType == "plant",plantType == "crop_grass", time>=start_year, time <= end_year),
@@ -160,7 +162,7 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
     labs(y = "Plant  carbon [g/m2]", x = "Years", title = paste0(scenario," plant carbon stocks"))
 
 
-  g2 = ggplot()+
+  g2 <- ggplot()+
     geom_area(data = data_long %>% filter( groundType == "aboveGround",cType == "litter", plantType == "crop_grass",time>=start_year, time <= end_year),
               aes(x = Date, y = Camt, fill = Ccomponent))+
     geom_area(data = data_long %>% filter( groundType == "belowGround",cType == "litter",plantType == "crop_grass", time>=start_year, time <= end_year),
@@ -170,7 +172,7 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
     geom_hline(yintercept = 0)+
     labs(y = "Litter carbon [g/m2]", x = "Years", title = paste0(scenario," litter carbon stocks"))
 
-  g3 = ggplot()+
+  g3 <- ggplot()+
     geom_area(data = data_long %>% filter( groundType == "aboveGround",cType == "soc", plantType == "crop_grass", time>=start_year, time <= end_year),
               aes(x = Date, y = Camt, fill = Ccomponent))+
     geom_area(data = data_long %>% filter( groundType == "belowGround",cType == "soc",plantType == "crop_grass", time>=start_year, time <= end_year),
@@ -181,7 +183,7 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
     labs(y = "Soil carbon [g/m2]", x = "Years", title = paste0(scenario," organic soil carbon stocks"))
 
 
-  g4 = ggplot()+
+  g4 <- ggplot()+
     geom_area(data = data_long %>% filter( groundType == "aboveGround",Ccomponent != "surface slow SOC", plantType == "crop_grass",time>=start_year, time <= end_year),
               aes(x = Date, y = Camt, fill = Ccomponent))+
     geom_area(data = data_long %>% filter( groundType == "belowGround",Ccomponent != "passive SOC",Ccomponent != "slow SOC", plantType == "crop_grass",time>=start_year, time <= end_year),
@@ -191,7 +193,7 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
     geom_hline(yintercept = 0)+
     labs(y = "Rapid turnover soil carbon [g/m2]", x = "Years", title = paste0(scenario," rapid turnover carbon stocks"))
 
-  g5 = ggplot()+
+  g5 <- ggplot()+
     geom_area(data = data_long %>% filter(plantType == "crop_grass",time>=start_year, time <= end_year),
               aes(x = Date, y = Camt, fill = Ccomponent))+
     theme_classic()+
@@ -199,7 +201,7 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
     geom_hline(yintercept = 0)+
     labs(y = "total carbon [g/m2]", x = "Years", title = paste0(scenario," total system carbon stocks"))
 
-  g6 = ggplot()+
+  g6 <- ggplot()+
     geom_area(data = data_long  %>% filter( groundType == "aboveGround" ,plantType == "crop_grass",time>=start_year, time <= end_year),
               aes(x = Date, y = Camt, fill = Ccomponent))+
     geom_area(data = data_long  %>% filter( groundType == "belowGround",plantType == "crop_grass",time>=start_year, time <= end_year),
@@ -207,10 +209,10 @@ plot_carbon_pools <- function(data, scenario, start_year, end_year){
     theme_classic()+
     scale_fill_manual(values = Ccomponent_colors) +
     geom_hline(yintercept = 0)+
-    labs(y = "Relative turnover soil carbon [g/m2]", x = "Years", title = paste0(scenario))
+    labs(y = "Total soil carbon above and belowground [g/m2]", x = "Years", title = paste0(scenario))
 
 
-  data_long_rel = data_long %>% filter(time>=start_year, time <= end_year) %>%
+  data_long_rel <- data_long %>% filter(time>=start_year, time <= end_year) %>%
     group_by(Ccomponent) %>% mutate(Camt_rel = Camt- min(Camt))
 
   g7 = ggplot()+

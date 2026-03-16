@@ -10,12 +10,12 @@
 #' @param ... Additional arguments passed to `get_power`.
 #'
 #' @return A data frame of monthly cloud cover and estimated transmission.
-#' 
-#' @import nasapower
-#' @import dplyr
-#' @import tidyr
+#'
+#' @importFrom nasapower get_power
+#' @importFrom dplyr select %>% group_by summarise mutate arrange
+#' @importFrom tidyr pivot_longer
 #' @import ggplot2
-#' 
+#'
 #' @export
 get_monthly_cloudiness <- function(lat, lon, start_year = 1985, end_year = 2024, plot = FALSE,...) {
   cloud_data <- get_power(
@@ -25,7 +25,7 @@ get_monthly_cloudiness <- function(lat, lon, start_year = 1985, end_year = 2024,
     temporal_api = "monthly",
     dates = c(paste0(start_year, "-01-01"), paste0(end_year, "-12-31"))
   )
-  
+
   cloud_df <- cloud_data %>%
     select(-YEAR) %>%
     group_by(LON, LAT, PARAMETER) %>%
@@ -36,7 +36,7 @@ get_monthly_cloudiness <- function(lat, lon, start_year = 1985, end_year = 2024,
       transmission = signif(1 - cloud_percent / 100, 2)
     ) %>%
     arrange(month_num)
-  
+
   if (plot) {
     ggplot(cloud_df, aes(x = month_num, y = cloud_percent)) +
       geom_line(color = "blue") +
@@ -48,6 +48,6 @@ get_monthly_cloudiness <- function(lat, lon, start_year = 1985, end_year = 2024,
       ) +
       theme_minimal()
   }
-  
+
   return(cloud_df)
 }

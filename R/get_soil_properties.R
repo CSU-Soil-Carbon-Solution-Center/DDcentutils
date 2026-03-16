@@ -1,7 +1,7 @@
 #' @title Soil property data from SSURGO
 #'
 #' @description This functions queries SSURGO and gets soil properties for a specified location using the `soilDB` package.
-#' The output is includes data for soil properties needed for a Daycent run.
+#' The output includes data for soil properties needed for a Daycent run.
 #'
 #' @param latitude  numeric. Latitude of the site in decimal degrees.
 #' @param longitude numeric. Longitude of the site in decimal degrees.
@@ -43,9 +43,9 @@
 #' lon <- -105.08
 #' soils <- get_soil_properties(lat, lon)
 #'
-#' @import sf
-#' @import soilDB
-#' @import dplyr
+#' @importFrom sf st_as_sf
+#' @importFrom soilDB SDA_spatialQuery get_SDA_property
+#' @importFrom dplyr group_by %>% filter ungroup
 #'
 #' @export
 get_soil_properties <- function(latitude, longitude) {

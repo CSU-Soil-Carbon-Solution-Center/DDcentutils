@@ -38,14 +38,19 @@
 #'
 #' @examples
 #' # Example usage
+#' \dontrun{
 #' lat <- 40.58
 #' lon <- -105.08
 #' site <- "Sample Site"
 #' weather <- getDaymetData(raw_data_path = NULL, site = site,
 #'                           lat = lat, lon = lon, start = 2000, end = 2010)
+#' }
 #'
-#' @import daymetr
-#' @import dplyr
+#' @importFrom daymetr download_daymet
+#' @importFrom dplyr arrange mutate %>% select
+#' @importFrom readr read_csv write_delim
+#' @importFrom here here
+#'
 #' @export
 getDaymetData <- function(raw_data_path = NULL, site = site,
                            lat = lat, lon = lon,
@@ -73,9 +78,9 @@ getDaymetData <- function(raw_data_path = NULL, site = site,
   ) %>%
     dplyr::select(day,monthDay, month, year, yday, tmax_C, tmin_C, prcp_cm_day, srad_Wm2, VPD_kpa_day)
 
-  weather_data_DayCent_out = weather_data_DayCent %>%
+  weather_data_DayCent_out <- weather_data_DayCent %>%
     select(monthDay,month, year,yday, tmax_C,tmin_C, prcp_cm_day)
-  temp_wth_file = here("sites", site, paste0(site, "_daymet.wth"))
+  temp_wth_file <- here("sites", site, paste0(site, "_daymet.wth"))
   write_delim(weather_data_DayCent_out, file = temp_wth_file,col_names = F)
   return(weather_data_DayCent)
 }

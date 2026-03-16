@@ -15,7 +15,7 @@
 #'
 #' @details
 #' The function downloads NASA Power weather data based on a user-specified time interval using data from the Agroclimatology Archive.
-#' The function then saves the weather file to the working directory ./sites/{site}/{site}_daymet.wth in the 9 column format.
+#' The function then saves the weather file to the working directory ./sites/{site}/{site}_Power.wth in the 9 column format.
 #' The returned data frame includes the following order necessary for a DayCent run:
 #' \itemize{
 #' \item day, corresponds to the day of the month.
@@ -42,8 +42,10 @@
 #' weather <- getNASAPowerData(raw_data_path = NULL, site = site,
 #'                             lat = lat, lon = lon, start = 2000, end = 2020)
 #'
-#' @import nasapower
-#' @import dplyr
+#' @importFrom nasapower get_power
+#' @importFrom dplyr mutate %>% select
+#' @importFrom here here
+#' @importFrom readr write_delim
 #'
 #' @export
 getNASAPowerData <- function(raw_data_path = NULL,
@@ -70,16 +72,16 @@ getNASAPowerData <- function(raw_data_path = NULL,
                                                   RH2M = RH2M,
                                                   srad_Ld = ALLSKY_SFC_SW_DWN*41.67*0.484583, #converting from kwh m2 to W m2 to 1 Langley/day = 0.484583 Watt/m2
                                                   c = WS2M*2.236) %>% # from ms to mph
-    dplyr::select(day, monthDay, month, year, yday, tmax_C, tmin_C, prcp_cm_day, srad_Wm2, RH2M, WS2M)
+    dplyr::select(day, monthDay, month, year, yday, tmax_C, tmin_C, prcp_cm_day, srad_Ld, RH2M, WS2M)
 
   #double check that NASA power includes leap years.
 
   # We could let the use choose between the 7 and 10 column weather file.
   # We could also make this save out another function ind. of source to not have copy/paste code.
 
-  weather_data_DayCent_out = weather_data_DayCent%>%
+  weather_data_DayCent_out <- weather_data_DayCent%>%
     select(monthDay, month, year,yday, tmax_C,tmin_C, prcp_cm_day,srad_Ld, RH2M, WS2M)
-  temp_wth_file = here("sites", site, paste0(site, "_Power.wth"))
+  temp_wth_file <- here("sites", site, paste0(site, "_Power.wth"))
   write_delim(weather_data_DayCent_out, file = temp_wth_file,col_names = F)
   return(weather_data_DayCent)
 
