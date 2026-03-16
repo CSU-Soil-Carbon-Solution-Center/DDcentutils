@@ -39,9 +39,11 @@
 #' }
 #'
 #' @examples
+#' \dontrun{
 #' lat <- 40.58
 #' lon <- -105.08
 #' soils <- get_soil_properties(lat, lon)
+#' }
 #'
 #' @importFrom sf st_as_sf
 #' @importFrom soilDB SDA_spatialQuery get_SDA_property
