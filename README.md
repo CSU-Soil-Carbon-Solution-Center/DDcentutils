@@ -269,6 +269,56 @@ more parameters (e.g., “Site file name”, “Starting year”) with new
 values. This function will not write repeating parameters like schedule
 events. It writes the modified file to a new output path.
 
+#### Building schedule files
+
+Beyond header-only edits, this package includes a full schedule engine
+for going table → *.sch* → validated file, and back:
+
+- **read_sch**: parses an existing *.sch* file into three tidy tables
+  (*site_table*, *block_table*, *event_table*), preserving source line
+  numbers for validator findings.
+- **build_sch**: builds an *sch* object from a *site_table* and
+  *event_table* (an optional *block_table* derives a single default
+  block when omitted).
+- **write_sch**: renders an *sch* object back to DayCent schedule text.
+- **validate_sch**: checks an *sch* object for structural and semantic
+  problems (unknown events, invalid day-of-year, unpaired crop/tree
+  events, missing library references) and returns a data frame of
+  findings.
+- **read_sch_tables** / **write_sch_tables**: round-trip the three
+  tables to and from CSV (*site.csv*, *blocks.csv*, *events.csv*), so
+  tables can be hand-edited between reading and building.
+
+A typical editing loop looks like:
+
+``` r
+sch <- read_sch("sites/wooster/wooster_cc_nt.sch")
+write_sch_tables(sch, "tables/")     # edit site.csv / blocks.csv / events.csv by hand
+tables <- read_sch_tables("tables/")
+sch2 <- build_sch(tables$site_table, tables$event_table, tables$block_table)
+findings <- validate_sch(sch2, library_dir = "100libraryfiles/", site_dir = "sites/wooster/")
+write_sch(sch2, path = "sites/wooster/wooster_cc_nt.sch")
+```
+
+The same loop is available from the shell via **sch_cli**
+(`inst/scripts/ddcent-sch.R`):
+
+``` bash
+Rscript inst/scripts/ddcent-sch.R build \
+    --site-table site.csv --event-table events.csv \
+    [--block-table blocks.csv] --out sites/wooster/wooster_cc_nt.sch
+
+Rscript inst/scripts/ddcent-sch.R validate sites/wooster/wooster_cc_nt.sch \
+    [--library-dir 100libraryfiles/] [--site-dir sites/wooster/] [--json]
+
+Rscript inst/scripts/ddcent-sch.R inspect sites/wooster/wooster_cc_nt.sch \
+    --out-dir tables/
+```
+
+Execution stays with **runDayCent** / **DayCentRunSite_single_run** —
+this engine only builds, validates, and inspects schedule files; it does
+not run DayCent itself.
+
 ### 2. Running DayCent
 
 Running the DayCent model requires all the input files identified in
