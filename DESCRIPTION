@@ -12,7 +12,9 @@ Description: DDcentutils is a package created by the Ecosystem Modeling and Data
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Imports: dplyr, lubridate, readr, data.table, here, tidyr, ggplot2, RColorBrewer, soilDB, sf, nasapower, terra, elevatr, daymetr, jsonlite
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
 URL: https://github.com/CSU-Soil-Carbon-Solution-Center/DDcentutils
 BugReports: https://github.com/CSU-Soil-Carbon-Solution-Center/DDcentutils/issues
