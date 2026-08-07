@@ -1,0 +1,55 @@
+{
+  "version": "daycent.v1",
+  "event_to_library": {
+    "CROP": "crop.100",
+    "CULT": "cult.100",
+    "FERT": "fert.100",
+    "IRRI": "irri.100",
+    "OMAD": "omad.100",
+    "GRAZ": "graz.100",
+    "HARV": "harv.100",
+    "FIRE": "fire.100",
+    "TREE": "tree.100",
+    "TREM": "trem.100"
+  },
+  "no_lookup_events": [
+    "EROD",
+    "FST",
+    "FLOD",
+    "AFRT",
+    "DRAN",
+    "IRIG",
+    "PLTM",
+    "LAST",
+    "SENM",
+    "TFST",
+    "TLST",
+    "FRST"
+  ],
+  "immediate_mode_events": {
+    "FERT": {
+      "library": "fert.100",
+      "named_option_allowed": true,
+      "keys": ["N", "P", "S", "F", "T", "I"]
+    },
+    "IRRI": {
+      "library": "irri.100",
+      "named_option_allowed": false,
+      "keys": ["A", "F", "C", "L"]
+    },
+    "IRIG": {
+      "library": "irri.100",
+      "named_option_allowed": false,
+      "keys": ["A", "F", "C", "L"]
+    }
+  },
+  "valid_pairings": [
+    ["FRST", "LAST"],
+    ["PLTM", "LAST"],
+    ["TFST", "TLST"]
+  ],
+  "event_day_of_year": {
+    "minimum": 1,
+    "stop_at_or_above": 367
+  }
+}

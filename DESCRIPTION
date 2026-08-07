@@ -8,11 +8,11 @@ Authors@R: c(
       person(given = "Corinne", family = "Walsh", email = "corinne.walsh@colostate.edu", role = c("ctb"))
       )
 Description: DDcentutils is a package created by the Ecosystem Modeling and Data Consortium (EMDC) Team at Colorado State University (CSU) to facilitate the use of the DayCent® model and the visualization of DayCent model run results.
-  It provides functions to automate input file building, DayCent runsystem, investigative sensitivity functionality and carbon and water balance plotting functions. 
+  It provides functions to automate input file building, DayCent runsystem, investigative sensitivity functionality and carbon and water balance plotting functions.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Imports: dplyr, lubridate, readr, data.table, here, tidyr, ggplot2, RColorBrewer, soilDB, sf, nasapower, terra, elevatr, daymetr
+Imports: dplyr, lubridate, readr, data.table, here, tidyr, ggplot2, RColorBrewer, soilDB, sf, nasapower, terra, elevatr, daymetr, jsonlite
 URL: https://github.com/CSU-Soil-Carbon-Solution-Center/DDcentutils
 BugReports: https://github.com/CSU-Soil-Carbon-Solution-Center/DDcentutils/issues
