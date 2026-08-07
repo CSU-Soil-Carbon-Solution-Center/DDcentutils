@@ -48,7 +48,7 @@ The returned soils.in file follows the template format, and thus includes 13 var
 }
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 latitude <- 45.7
 longitude <- -118.6
 site <- "test_site" ## this should be an existing folder within the sites folder for a DayCent run

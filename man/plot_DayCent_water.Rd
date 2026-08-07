@@ -39,7 +39,7 @@ The output from this function is a list of five plots:
 }
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # scen <- "cc_nt"
   soildata_file <- "./soils.in"
 
