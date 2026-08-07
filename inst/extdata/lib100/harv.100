@@ -1,0 +1,7 @@
+# Synthetic stub -- NOT a real DayCent harv.100 library file. Contains only
+# minimal structure (block ID + placeholder parameter lines) for testing.
+G           'synthetic grain harvest'
+0.90000     REMWSD
+G75S        'synthetic 75% grain harvest with straw removal'
+0.75000     REMWSD
+0.50000     STRAW_REM

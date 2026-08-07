@@ -1,0 +1,11 @@
+# Synthetic stub -- NOT a real DayCent crop.100 library file. Contains only
+# minimal structure (block ID + placeholder parameter lines) for testing.
+W1          'synthetic winter wheat'
+0.60000     PRDX(1)
+1.00000     PPDF(1)
+W2          'synthetic spring wheat'
+0.55000     PRDX(1)
+G2          'synthetic grass 2'
+0.40000     PRDX(1)
+C5          'synthetic crop 5'
+0.70000     PRDX(1)

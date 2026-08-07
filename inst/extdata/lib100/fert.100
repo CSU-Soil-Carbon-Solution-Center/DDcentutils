@@ -1,0 +1,5 @@
+# Synthetic stub -- NOT a real DayCent fert.100 library file. Contains only
+# minimal structure (block ID + placeholder parameter lines) for testing.
+N15C        'synthetic 15N-labeled fertilizer option'
+3.70000     FERAMT(1)
+0.75000     NH4FRC

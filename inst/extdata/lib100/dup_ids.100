@@ -1,0 +1,6 @@
+# Synthetic stub -- NOT a real DayCent library file. Exercises duplicate
+# block-ID detection only.
+DUPID       'synthetic duplicate id, first occurrence'
+1.00000     PARAM1
+DUPID       'synthetic duplicate id, second occurrence'
+2.00000     PARAM1
