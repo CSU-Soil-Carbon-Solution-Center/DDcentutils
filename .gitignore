@@ -6,5 +6,9 @@
 .quarto
 
 
-#local documentation 
+#local documentation
 documentation/local/
+
+#local build board (synced from ../../buildBoard, never published)
+/board/
+/build-status.json
