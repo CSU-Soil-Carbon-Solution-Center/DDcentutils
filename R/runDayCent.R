@@ -1,3 +1,21 @@
+.runDayCent_process <- function(command, args, wait = TRUE, stdout = TRUE, stderr = TRUE) {
+  system2(command = command, args = args, wait = wait, stdout = stdout, stderr = stderr)
+}
+
+.runDayCent_args <- function(site, run, dc_path100_in, single_site_logic = FALSE) {
+  extendRun <- if (single_site_logic) {
+    paste0("")
+  } else if (run == "eq") {
+    " -W eq_extend.100"
+  } else if (run == "base") {
+    " -W base_extend.100 --site eq_extend.100"
+  } else {
+    " --site base_extend.100"
+  }
+
+  paste0('-s ', site, '_', run, ' -N ', run, extendRun, ' -l "', dc_path100_in, '"')
+}
+
 #' @title Run DayCent
 #'
 #' @description This function builds a command line execution and runs the DayCent model.
@@ -29,27 +47,14 @@ runDayCent <- function(outfiles = "no_outfiles.in", site, run,
     stop(paste("Error: Path to DC100 list file not found at:", dc_path100_in))
   }
 
-  # Define the run type and extend arguments accordingly
-  # single run logic, bypasses the spin up and directly runs the site.
-  extendRun <- if (single_site_logic) {
-    paste0("") #" --site ", single_site)
-  } else if (run == "eq") {
-    " -W eq_extend.100"
-  } else if (run == "base") {
-    " -W base_extend.100 --site eq_extend.100"
-  }  else {
-    " --site base_extend.100"
-  }
-
-
   # Copy no_outfiles.in to suppress output during equilibrium run
   file.copy(from = outfiles, to = "outfiles.in", overwrite = TRUE)
 
-  # Define equilibrium arguments
-  eq_args <- paste0('-s ', site, '_', run, ' -N ', run, extendRun, ' -l "', dc_path100_in, '"')
+  # Define the DayCent arguments
+  eq_args <- .runDayCent_args(site, run, dc_path100_in, single_site_logic)
 
   # Run the equilibrium process
-  log <- system2(
+  log <- .runDayCent_process(
     command = dc_exe_in,# Path to the equilibrium executable
     args = eq_args,     # Arguments for the equilibrium run
     wait = TRUE,        # Wait for the process to finish
