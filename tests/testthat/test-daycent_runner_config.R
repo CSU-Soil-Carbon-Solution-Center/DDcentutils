@@ -5,6 +5,8 @@ test_that("exe configuration does not require API credentials", {
   expect_equal(cfg$base_url, "https://api.emdc.eco")
   expect_true(cfg$verify_ssl)
   expect_equal(cfg$poll_seconds, 60)
+  expect_equal(cfg$model_name, "DayCent")
+  expect_equal(cfg$model_version, "491")
   expect_null(cfg$api_key)
   expect_null(cfg$product_id)
 })
@@ -25,18 +27,18 @@ test_that("exe configuration validates requested paths", {
                "requires exe_path")
 })
 
-test_that("api configuration requires credentials without exposing them", {
-  expect_error(daycent_runner_config(backend = "api", api_key = "", product_id = "prod"),
+test_that("api configuration requires a key but uses model identity defaults", {
+  expect_error(daycent_runner_config(backend = "api", api_key = ""),
                "EMDC_API_KEY")
-  expect_error(daycent_runner_config(backend = "api", api_key = "secret-value", product_id = ""),
-               "EMDC_DAYCENT_PRODUCT_ID")
 
-  cfg <- daycent_runner_config(backend = "api", api_key = "secret-value",
-                               product_id = "prod-1")
+  cfg <- daycent_runner_config(backend = "api", api_key = "secret-value")
   expect_equal(cfg$api_key, "secret-value")
-  expect_equal(cfg$product_id, "prod-1")
+  expect_null(cfg$product_id)
+  expect_equal(cfg$model_name, "DayCent")
+  expect_equal(cfg$model_version, "491")
+
   error_message <- tryCatch(
-    daycent_runner_config(backend = "api", api_key = "secret-value", product_id = ""),
+    daycent_runner_config(backend = "api", api_key = "secret-value", model_name = ""),
     error = function(error) error$message
   )
   expect_false(grepl("secret-value", error_message, fixed = TRUE))

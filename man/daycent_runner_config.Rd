@@ -7,7 +7,8 @@ daycent_runner_config(backend = c("exe", "api"), exe_path = NULL,
   dc_path100 = NULL, validate_paths = FALSE,
   base_url = "https://api.emdc.eco", verify_ssl = TRUE,
   poll_seconds = 60, api_key = Sys.getenv("EMDC_API_KEY", ""),
-  product_id = Sys.getenv("EMDC_DAYCENT_PRODUCT_ID", ""))
+  product_id = Sys.getenv("EMDC_DAYCENT_PRODUCT_ID", ""),
+  model_name = "DayCent", model_version = "491")
 }
 \arguments{
   \item{backend}{Either \code{"exe"} or \code{"api"}.}
@@ -18,7 +19,9 @@ daycent_runner_config(backend = c("exe", "api"), exe_path = NULL,
   \item{verify_ssl}{Whether to verify API TLS certificates.}
   \item{poll_seconds}{Positive polling interval in seconds.}
   \item{api_key}{API key, defaulting to \code{EMDC_API_KEY}.}
-  \item{product_id}{Product ID, defaulting to \code{EMDC_DAYCENT_PRODUCT_ID}.}
+  \item{product_id}{Optional product ID, defaulting to \code{EMDC_DAYCENT_PRODUCT_ID}.}
+  \item{model_name}{API model name, defaulting to \code{DayCent}.}
+  \item{model_version}{API model version, defaulting to \code{491}.}
 }
 \value{A named runner configuration list.}
 \description{Creates validated configuration for local executable or API-backed DayCent runs.}

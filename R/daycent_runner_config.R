@@ -12,8 +12,11 @@
 #' @param verify_ssl Logical. Whether API TLS certificates should be verified.
 #' @param poll_seconds Positive numeric polling interval for later API work.
 #' @param api_key Character API key. Defaults to `EMDC_API_KEY`.
-#' @param product_id Character DayCent product ID. Defaults to
-#'   `EMDC_DAYCENT_PRODUCT_ID`.
+#' @param product_id Optional DayCent product ID. Defaults to
+#'   `EMDC_DAYCENT_PRODUCT_ID` when set; model name and version are the primary
+#'   API identity.
+#' @param model_name Character API model name. Defaults to `DayCent`.
+#' @param model_version Character API model version. Defaults to `491`.
 #'
 #' @return A named configuration list. The API key is returned for later
 #'   authenticated work but is never printed or included in error messages.
@@ -27,7 +30,9 @@ daycent_runner_config <- function(
     verify_ssl = TRUE,
     poll_seconds = 60,
     api_key = Sys.getenv("EMDC_API_KEY", ""),
-    product_id = Sys.getenv("EMDC_DAYCENT_PRODUCT_ID", "")) {
+    product_id = Sys.getenv("EMDC_DAYCENT_PRODUCT_ID", ""),
+    model_name = "DayCent",
+    model_version = "491") {
   backend <- match.arg(backend)
 
   if (length(validate_paths) != 1L || !is.logical(validate_paths) || is.na(validate_paths)) {
@@ -40,17 +45,22 @@ daycent_runner_config <- function(
       is.na(poll_seconds) || poll_seconds <= 0) {
     stop("poll_seconds must be a positive number.", call. = FALSE)
   }
-  if (length(base_url) != 1L || !is.character(base_url) || !nzchar(base_url)) {
+  if (length(base_url) != 1L || !is.character(base_url) || is.na(base_url) || !nzchar(base_url)) {
     stop("base_url must be a non-empty character value.", call. = FALSE)
   }
+  if (length(model_name) != 1L || !is.character(model_name) || is.na(model_name) || !nzchar(model_name)) {
+    stop("model_name must be a non-empty character value.", call. = FALSE)
+  }
+  if (length(model_version) != 1L || !is.character(model_version) || is.na(model_version) || !nzchar(model_version)) {
+    stop("model_version must be a non-empty character value.", call. = FALSE)
+  }
 
-  if (backend == "api") {
-    if (!is.character(api_key) || length(api_key) != 1L || !nzchar(api_key)) {
-      stop("API backend requires EMDC_API_KEY or an explicit api_key.", call. = FALSE)
-    }
-    if (!is.character(product_id) || length(product_id) != 1L || !nzchar(product_id)) {
-      stop("API backend requires EMDC_DAYCENT_PRODUCT_ID or an explicit product_id.", call. = FALSE)
-    }
+  if (backend == "api" &&
+      (!is.character(api_key) || length(api_key) != 1L || is.na(api_key) || !nzchar(api_key))) {
+    stop("API backend requires EMDC_API_KEY or an explicit api_key.", call. = FALSE)
+  }
+  if (!is.character(product_id) || length(product_id) != 1L || is.na(product_id)) {
+    stop("product_id must be a single character value when supplied.", call. = FALSE)
   }
 
   if (backend == "exe" && isTRUE(validate_paths)) {
@@ -76,6 +86,8 @@ daycent_runner_config <- function(
     verify_ssl = verify_ssl,
     poll_seconds = poll_seconds,
     api_key = if (backend == "api") api_key else NULL,
-    product_id = if (backend == "api") product_id else NULL
+    product_id = if (nzchar(product_id)) product_id else NULL,
+    model_name = model_name,
+    model_version = model_version
   )
 }
