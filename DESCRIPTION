@@ -13,7 +13,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Imports: dplyr, lubridate, readr, data.table, here, tidyr, ggplot2, RColorBrewer, soilDB, sf, nasapower, terra, elevatr, daymetr
+Imports: dplyr, lubridate, readr, data.table, here, tidyr, ggplot2, RColorBrewer, soilDB, sf, nasapower, terra, elevatr, daymetr, httr
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
 URL: https://github.com/CSU-Soil-Carbon-Solution-Center/DDcentutils
