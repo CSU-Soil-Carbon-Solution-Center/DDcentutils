@@ -1,4 +1,4 @@
-test_that("runDayCent_api composes staging, submission, watching, and download", {
+test_that("runDayCent_api composes multi-pair staging, submission, watching, and download", {
   project <- tempfile("daycent-project-")
   dir.create(project)
   on.exit(unlink(project, recursive = TRUE), add = TRUE)
@@ -12,11 +12,9 @@ test_that("runDayCent_api composes staging, submission, watching, and download",
       file.create(out_zip)
       invisible(out_zip)
     },
-    submit_daycent_run = function(config, input_zip, include, run_eq, name,
-                                  site_name, scenario_name, wait) {
+    submit_daycent_run = function(config, input_zip, include, run_eq, name, wait) {
       calls$submit <<- list(input_zip = input_zip, include = include,
-                           run_eq = run_eq, name = name, site_name = site_name,
-                           scenario_name = scenario_name, wait = wait)
+                           run_eq = run_eq, name = name, wait = wait)
       list(run_id = "run-12", status = "Queued")
     },
     watch_daycent_run = function(config, run_id, timeout_seconds) {
@@ -35,15 +33,16 @@ test_that("runDayCent_api composes staging, submission, watching, and download",
   )
 
   result <- runDayCent_api(
-    "siteA", "scenario1", run_eq = TRUE, config = config,
+    include = c("siteA/scenario1", "siteB/scenario2"),
+    run_eq = TRUE, run_base = TRUE, config = config,
     project_path = project, name = "named-run", keep_zip = TRUE,
     timeout_seconds = 42, output_zip = "result.zip", overwrite = TRUE
   )
-  expect_equal(calls$zip$include, "siteA/scenario1")
+  expect_equal(calls$zip$include, c("siteA/scenario1", "siteB/scenario2"))
   expect_true(calls$zip$run_eq)
-  expect_equal(calls$submit[c("include", "name", "site_name", "scenario_name", "wait")],
-               list(include = "siteA/scenario1", name = "named-run",
-                    site_name = "siteA", scenario_name = "scenario1", wait = FALSE))
+  expect_equal(calls$submit[c("include", "name", "wait")],
+               list(include = c("siteA/scenario1", "siteB/scenario2"),
+                    name = "named-run", wait = FALSE))
   expect_equal(calls$watch, list(run_id = "run-12", timeout_seconds = 42))
   expect_true(calls$download$keep_zip)
   expect_true(calls$download$overwrite)
@@ -69,7 +68,7 @@ test_that("runDayCent_api wait false returns resumable submission", {
     .package = "DDcentutils"
   )
 
-  result <- runDayCent_api("siteA", "scenario1", config = config,
+  result <- runDayCent_api("siteA/scenario1", config = config,
                            project_path = project, wait = FALSE)
   expect_equal(result$run_id, "run-resume")
   expect_false(watched)
@@ -85,14 +84,18 @@ test_that("runDayCent_api validates before staging", {
     .package = "DDcentutils"
   )
 
-  expect_error(runDayCent_api("siteA", "scenario1",
+  expect_error(runDayCent_api("siteA/scenario1",
                               config = list(backend = "api", api_key = "secret"),
                               project_path = project), "product_id")
-  expect_error(runDayCent_api("siteA", "eq",
+  expect_error(runDayCent_api("siteA/eq",
                               config = list(backend = "api", api_key = "secret",
                                             product_id = "product"),
                               project_path = project), "run_eq")
-  expect_error(runDayCent_api("siteA", "scenario1",
+  expect_error(runDayCent_api("siteA/scenario1", run_base = TRUE,
+                              config = list(backend = "api", api_key = "secret",
+                                            product_id = "product"),
+                              project_path = project), "require.*match")
+  expect_error(runDayCent_api("siteA/scenario1",
                               config = list(backend = "exe", api_key = "secret",
                                             product_id = "product"),
                               project_path = project), "API runner configuration")

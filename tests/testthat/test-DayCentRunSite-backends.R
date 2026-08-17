@@ -46,10 +46,10 @@ test_that("DayCentRunSite routes API options without local validation", {
     output_zip = "result.zip", overwrite = TRUE
   )
   expect_equal(result$run_id, "run-api")
-  expect_equal(captured[c("site", "scen", "run_eq", "config", "project_path",
+  expect_equal(captured[c("include", "run_eq", "run_base", "config", "project_path",
                           "name", "wait", "keep_zip", "timeout_seconds",
                           "output_zip", "overwrite")],
-               list(site = "siteA", scen = "scenario1", run_eq = TRUE,
+               list(include = "siteA/scenario1", run_eq = TRUE, run_base = TRUE,
                     config = config, project_path = "project", name = "api-name",
                     wait = FALSE, keep_zip = TRUE, timeout_seconds = 9,
                     output_zip = "result.zip", overwrite = TRUE))
@@ -66,6 +66,6 @@ test_that("DayCentRunSite rejects invalid backend combinations before routing", 
   expect_error(DayCentRunSite("siteA", "scenario1", backend = "exe",
                               config = config), "agree")
   expect_error(DayCentRunSite("siteA", "scenario1", run_base = TRUE,
-                              config = config), "local-only")
+                              config = config), "Base-only")
   expect_false(called)
 })

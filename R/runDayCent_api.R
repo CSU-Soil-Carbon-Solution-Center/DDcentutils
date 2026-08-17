@@ -1,12 +1,16 @@
-#' Run one DayCent site/scenario through the EMDC API
+#' Run selected DayCent site/scenario pairs through the EMDC API
 #'
-#' Stages one exact `site/scenario` selection, submits it to the ModelRuns API,
-#' and optionally watches and downloads the result. The API supports
-#' equilibrium through `run_eq`; an independent base-only run is not exposed.
+#' Stages one or more exact `site/scenario` selections, submits one ModelRuns
+#' request, and optionally watches and downloads the result. The API represents
+#' equilibrium and base as one paired choice; an independent base-only run is
+#' not exposed.
 #'
-#' @param site Character site name.
-#' @param scen Character scenario name.
-#' @param run_eq Logical. Request equilibrium/base processing before the scenario.
+#' @param include Character vector of exact `site/scenario` selections. `NULL`,
+#'   empty, or `"*"` selects all pairs discovered by the API.
+#' @param run_eq Logical. Request equilibrium and base processing before each
+#'   selected scenario.
+#' @param run_base Logical. Must equal `run_eq` for API runs because the API
+#'   exposes one `runEquilibrium` field rather than an independent base flag.
 #' @param config API configuration from [daycent_runner_config()].
 #' @param project_path Project root containing `sites/` and optionally `libs/`.
 #' @param name Descriptive API run name.
@@ -20,7 +24,7 @@
 #'   With `wait = TRUE`, a list containing submission, terminal status, and
 #'   extracted result paths.
 #' @export
-runDayCent_api <- function(site, scen, run_eq = FALSE, config,
+runDayCent_api <- function(include = NULL, run_eq = FALSE, run_base = run_eq, config,
                            project_path = ".", name = "daycent-r-api-run",
                            wait = TRUE, keep_zip = FALSE,
                            timeout_seconds = 3600, output_zip = NULL,
@@ -29,24 +33,19 @@ runDayCent_api <- function(site, scen, run_eq = FALSE, config,
   if (!is.null(config$backend) && !identical(config$backend, "api")) {
     stop("runDayCent_api requires an API runner configuration.", call. = FALSE)
   }
-  if (!is.character(site) || length(site) != 1L || is.na(site) || !nzchar(site) ||
-      !grepl("^[A-Za-z0-9_-]+$", site)) {
-    stop("site must be one non-empty API-safe name.", call. = FALSE)
-  }
-  if (!is.character(scen) || length(scen) != 1L || is.na(scen) || !nzchar(scen) ||
-      !grepl("^[A-Za-z0-9_-]+$", scen)) {
-    stop("scen must be one non-empty API-safe name.", call. = FALSE)
-  }
-  if (tolower(scen) %in% c("eq", "base")) {
-    stop("scen must not be eq or base; use run_eq for equilibrium stages.", call. = FALSE)
-  }
   if (length(run_eq) != 1L || !is.logical(run_eq) || is.na(run_eq) ||
+      length(run_base) != 1L || !is.logical(run_base) || is.na(run_base) ||
       length(wait) != 1L || !is.logical(wait) || is.na(wait) ||
       length(keep_zip) != 1L || !is.logical(keep_zip) || is.na(keep_zip) ||
       length(overwrite) != 1L || !is.logical(overwrite) || is.na(overwrite)) {
-    stop("run_eq, wait, keep_zip, and overwrite must be single TRUE or FALSE values.",
+    stop("run_eq, run_base, wait, keep_zip, and overwrite must be single TRUE or FALSE values.",
          call. = FALSE)
   }
+  if (!identical(run_eq, run_base)) {
+    stop("API runs require run_eq and run_base to match; base-only execution is local-only.",
+         call. = FALSE)
+  }
+  include <- .daycent_include(include)
   if (!is.numeric(timeout_seconds) || length(timeout_seconds) != 1L ||
       is.na(timeout_seconds) || timeout_seconds <= 0) {
     stop("timeout_seconds must be positive.", call. = FALSE)
@@ -56,15 +55,13 @@ runDayCent_api <- function(site, scen, run_eq = FALSE, config,
     stop("project_path must name an existing project directory.", call. = FALSE)
   }
 
-  include <- paste(site, scen, sep = "/")
   input_zip <- tempfile("daycent-inputs-", fileext = ".zip")
   on.exit(unlink(input_zip, force = TRUE), add = TRUE)
   zip_daycent_inputs(project_path, include = include, run_eq = run_eq,
                      out_zip = input_zip)
   submission <- submit_daycent_run(
     config = config, input_zip = input_zip, include = include,
-    run_eq = run_eq, name = name, site_name = site,
-    scenario_name = scen, wait = FALSE
+    run_eq = run_eq, name = name, wait = FALSE
   )
   if (!isTRUE(wait)) return(submission)
 

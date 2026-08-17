@@ -31,9 +31,11 @@ DayCentRunSite(
 
 \item{scen}{character. Scenario descriptor and should match the schedule file name for the experimental run.}
 
-\item{run_eq}{logical. Default is FALSE. If TRUE, DayCent runs the equilibrium and the base scenario.}
+\item{run_eq}{logical. Default is FALSE. If TRUE, DayCent runs equilibrium
+and base before the scenario. The API backend treats these as one paired choice.}
 
-\item{run_base}{logical. Default is FALSE. If TRUE, DayCent runs the base scenario.}
+\item{run_base}{logical. Default is FALSE. If TRUE, the local backend runs
+the base scenario. Base-only API execution is not supported.}
 
 \item{dc_exe_in}{character. Local path to the DayCent executable.}
 

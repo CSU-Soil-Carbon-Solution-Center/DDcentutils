@@ -2,12 +2,12 @@
 % Please edit documentation in R/runDayCent_api.R
 \name{runDayCent_api}
 \alias{runDayCent_api}
-\title{Run one DayCent site/scenario through the EMDC API}
+\title{Run selected DayCent site/scenario pairs through the EMDC API}
 \usage{
 runDayCent_api(
-  site,
-  scen,
+  include = NULL,
   run_eq = FALSE,
+  run_base = run_eq,
   config,
   project_path = ".",
   name = "daycent-r-api-run",
@@ -19,11 +19,14 @@ runDayCent_api(
 )
 }
 \arguments{
-\item{site}{Character site name.}
+\item{include}{Character vector of exact \code{site/scenario} selections. \code{NULL},
+empty, or \code{"*"} selects all pairs discovered by the API.}
 
-\item{scen}{Character scenario name.}
+\item{run_eq}{Logical. Request equilibrium and base processing before each
+selected scenario.}
 
-\item{run_eq}{Logical. Request equilibrium/base processing before the scenario.}
+\item{run_base}{Logical. Must equal \code{run_eq} for API runs because the API
+exposes one \code{runEquilibrium} field rather than an independent base flag.}
 
 \item{config}{API configuration from \code{\link[=daycent_runner_config]{daycent_runner_config()}}.}
 
@@ -47,7 +50,8 @@ With \code{wait = TRUE}, a list containing submission, terminal status, and
 extracted result paths.
 }
 \description{
-Stages one exact \code{site/scenario} selection, submits it to the ModelRuns API,
-and optionally watches and downloads the result. The API supports
-equilibrium through \code{run_eq}; an independent base-only run is not exposed.
+Stages one or more exact \code{site/scenario} selections, submits one ModelRuns
+request, and optionally watches and downloads the result. The API represents
+equilibrium and base as one paired choice; an independent base-only run is
+not exposed.
 }
