@@ -5,8 +5,8 @@
 The atomic `DayCentRunSite()` workflow now supports the local executable backend
 and the EMDC API backend. API submission requires an API key and
 `product_id`; `model_name` and `model_version` identify the model but do not
-replace the API's required `productId`. Batch site/scenario orchestration and
-batch result mapping are deferred to Packet 07.
+replace the API's required `productId`. `runDayCent_batch()` now composes the
+atomic runner for deterministic local or API site/scenario batches.
 
 # DDcentutils 0.1.0.9000
 

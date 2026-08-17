@@ -349,8 +349,10 @@ block you are trying to bypass.
 
 `DayCentRunSite()` is the atomic one-site/one-scenario entry point. The local
 executable backend remains the default, so existing calls continue to use the
-licensed DayCent executable. Batch site/scenario orchestration and batch result
-mapping are deferred to Packet 07.
+licensed DayCent executable. Use `runDayCent_batch()` for deterministic
+site/scenario selection across either backend; the atomic functions remain
+one-site/one-scenario interfaces.
+This batch layer is delivered in Packet 07.
 
 For local execution, configure the executable and `.100` library list and run
 from the site directory. This example is marked `dontrun` because it invokes a
