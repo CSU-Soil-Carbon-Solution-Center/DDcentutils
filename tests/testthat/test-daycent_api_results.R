@@ -130,3 +130,51 @@ test_that("download failures clean temporary files and redact API keys", {
   expect_true(grepl("redacted", error_message, fixed = TRUE))
   expect_false(file.exists(captured_path))
 })
+
+test_that("download rejects corrupt and empty archives and cleans temporary files", {
+  project <- tempfile("daycent-project-")
+  dir.create(project)
+  on.exit(unlink(project, recursive = TRUE), add = TRUE)
+  captured_path <- NULL
+  testthat::local_mocked_bindings(
+    .daycent_result_download_request = function(url, headers, output_zip, verify_ssl) {
+      captured_path <<- output_zip
+      writeBin(charToRaw("not a zip"), output_zip)
+      list(status_code = 200L, text = "")
+    },
+    .package = "DDcentutils"
+  )
+  expect_error(download_daycent_results(result_config(), "run-corrupt", project),
+               "Could not read result ZIP")
+  expect_false(file.exists(captured_path))
+
+  testthat::local_mocked_bindings(
+    .daycent_result_download_request = function(url, headers, output_zip, verify_ssl) {
+      captured_path <<- output_zip
+      file.create(output_zip)
+      list(status_code = 200L, text = "")
+    },
+    .package = "DDcentutils"
+  )
+  expect_error(download_daycent_results(result_config(), "run-empty", project),
+               "empty ZIP")
+  expect_false(file.exists(captured_path))
+})
+
+test_that("existing caller-supplied ZIP paths require explicit overwrite", {
+  project <- tempfile("daycent-project-")
+  dir.create(project)
+  on.exit(unlink(project, recursive = TRUE), add = TRUE)
+  output_zip <- file.path(project, "result.zip")
+  writeLines("existing", output_zip)
+  testthat::local_mocked_bindings(
+    .daycent_result_download_request = function(url, headers, output_zip, verify_ssl) {
+      file.copy(make_result_zip("sites/siteA/scenario1/result.out"), output_zip,
+                overwrite = TRUE)
+      list(status_code = 200L, text = "")
+    },
+    .package = "DDcentutils"
+  )
+  expect_error(download_daycent_results(result_config(), "run-existing", project,
+                                        output_zip = output_zip), "Output ZIP exists")
+})
