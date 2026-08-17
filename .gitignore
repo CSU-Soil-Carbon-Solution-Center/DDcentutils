@@ -4,3 +4,10 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+# Local API credentials and run artifacts
+.Renviron
+.env
+apiDocs/
+run_*.zip
+results*.zip

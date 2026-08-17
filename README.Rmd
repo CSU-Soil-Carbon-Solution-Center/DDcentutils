@@ -264,6 +264,109 @@ Schematic of the DayCentRunSite function.</figcaption>
 This function **can run all three blocks** if the *run_eq* and *run_base* arguments are TRUE.
 Running the equilibrium and baseline blocks is not required as long as an extended .100 file exists for the block you are trying to bypass.
 
+#### Choosing the local or API backend
+
+`DayCentRunSite()` is the atomic one-site/one-scenario entry point. The local
+executable backend remains the default, so existing calls continue to use the
+licensed DayCent executable. Batch site/scenario orchestration and batch result
+mapping are deferred to Packet 07.
+
+For local execution, configure the executable and `.100` library list and run
+from the site directory. The example is marked `dontrun` because it invokes a
+licensed executable:
+
+```{r, eval=FALSE}
+\dontrun{
+local_config <- daycent_runner_config(
+  backend = "exe",
+  exe_path = "path/to/DayCent",
+  dc_path100 = "path/to/100libraryfiles/dc.100",
+  validate_paths = TRUE
+)
+DayCentRunSite("siteA", "scenario1", config = local_config)
+}
+```
+
+The API backend uses `EMDC_BACKEND_SERVER`, `EMDC_API_KEY`, and
+`EMDC_DAYCENT_PRODUCT_ID`. Set the server to a complete URL, including
+`https://` or `http://` for a local development server. TLS verification is
+enabled by default with `verify_ssl = TRUE`; disabling it should be limited to
+an explicitly trusted local development endpoint. The API configuration polls
+every 60 seconds by default and uses a 3600-second watch timeout unless those
+values are changed.
+
+Every API submission must provide `product_id` either through
+`EMDC_DAYCENT_PRODUCT_ID` or directly in `daycent_runner_config()`.
+`model_name = "DayCent"` and `model_version = "491"` are descriptive identity
+fields and are not a substitute for the API `productId`.
+
+```{r, eval=FALSE}
+\dontrun{
+api_config <- daycent_runner_config(
+  backend = "api",
+  base_url = Sys.getenv("EMDC_BACKEND_SERVER", "https://api.emdc.eco"),
+  api_key = Sys.getenv("EMDC_API_KEY"),
+  product_id = Sys.getenv("EMDC_DAYCENT_PRODUCT_ID"),
+  verify_ssl = TRUE,
+  poll_seconds = 60
+)
+
+completed <- DayCentRunSite(
+  site = "siteA", scen = "scenario1", run_eq = TRUE,
+  config = api_config, project_path = "path/to/project",
+  wait = TRUE, keep_zip = FALSE
+)
+}
+```
+
+Use `wait = FALSE` to submit without polling or downloading. The returned
+submission contains `run_id`, which can be resumed later:
+
+```{r, eval=FALSE}
+\dontrun{
+submitted <- DayCentRunSite(
+  site = "siteA", scen = "scenario1", config = api_config,
+  project_path = "path/to/project", wait = FALSE
+)
+
+status <- watch_daycent_run(
+  api_config, submitted$run_id, timeout_seconds = 3600
+)
+results <- download_daycent_results(
+  api_config, submitted$run_id, project_path = "path/to/project",
+  keep_zip = FALSE, overwrite = FALSE
+)
+}
+```
+
+API results are copied to `sites/{site}/outputs/{scenario}/`. API metadata
+(`status.json`, `run_config.json`, `input_qc.json`, and `input_qc.md`) is
+archived under `apiDocs/{timestamp}_{run-id}/`; metadata from repeated runs is
+not silently replaced. Temporary result ZIPs are removed after success or
+failure unless `keep_zip = TRUE`.
+
+#### API contract evidence
+
+The offline contract comparison for this atomic milestone used the checked-out
+`platform/emdc-platform` revision
+`d4d00d61fd70f3a32ef2b11504d60e9aa7a8158f`, specifically
+`dotnet/src/Web/Endpoints/ModelRuns.cs` and `modeling/README-API.md`. The
+observed request contract is `POST /api/ModelRuns` with `X-Api-Key`,
+`productId`, optional organization/name/site/scenario fields, repeated
+`include`, `runEquilibrium`, optional dry-run fields, and `inputZip`. A
+successful submission returns an accepted result containing a `modelRun` and
+ID; status is read from `GET /api/ModelRuns/{runId}`, and the complete archive
+is downloaded from `GET /api/ModelRuns/{runId}/download`.
+
+The checked-out documentation lists `Queued`, `Running`, `Completed`,
+`Failed`, `ValidationFailed`, `InsufficientCredits`, `PreflightPassed`, and
+`Cancelled`. The R client also accepts `CompletedWithErrors`,
+`PartiallyExecuted`, and a few cancellation spellings observed in existing
+client behavior; production confirmation of those variants belongs to the
+operator-attended Packet 08 smoke matrix. No authenticated request, dry run,
+licensed executable, or live model execution is part of this documentation
+milestone.
+
 ### 3. Output visualization
 
 In this package, we offer three functions to facilitate output visualization:
