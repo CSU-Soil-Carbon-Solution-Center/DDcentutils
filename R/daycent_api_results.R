@@ -180,8 +180,8 @@ download_daycent_results <- function(config, run_id, project_path,
   if (!is.character(output_zip) || length(output_zip) != 1L || !nzchar(output_zip)) {
     stop("output_zip must be NULL or a non-empty file path.", call. = FALSE)
   }
-  if (isTRUE(keep_zip) && file.exists(output_zip) && !isTRUE(overwrite)) {
-    stop("Retained ZIP exists; set overwrite = TRUE to replace it.", call. = FALSE)
+  if (file.exists(output_zip) && !isTRUE(overwrite)) {
+    stop("Output ZIP exists; set overwrite = TRUE to replace it.", call. = FALSE)
   }
   parent <- dirname(normalizePath(output_zip, winslash = "/", mustWork = FALSE))
   if (!dir.exists(parent)) dir.create(parent, recursive = TRUE, showWarnings = FALSE)
