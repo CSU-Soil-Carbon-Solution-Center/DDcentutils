@@ -368,16 +368,13 @@ DayCentRunSite("siteA", "scenario1", config = local_config)
 }
 ```
 
-The API backend uses `EMDC_BACKEND_SERVER`, `EMDC_API_KEY`, and
-`EMDC_DAYCENT_PRODUCT_ID`. Set the server to a complete URL. TLS verification
+The API backend uses `EMDC_BACKEND_SERVER` and `EMDC_API_KEY`. Set the server to a complete URL. TLS verification
 is enabled by default with `verify_ssl = TRUE`; disabling it should be limited
 to a trusted local development endpoint. Polling defaults to 60 seconds and
 the watch timeout defaults to 3600 seconds.
 
-Every API submission must provide `product_id` through
-`EMDC_DAYCENT_PRODUCT_ID` or directly in `daycent_runner_config()`.
-`model_name = "DayCent"` and `model_version = "491"` do not substitute for
-the API `productId`.
+The API resolves the product identity from `model_name` and `model_version`
+before staging the input archive. The defaults are `"DayCent"` and `"491"`.
 
 ``` r
 \dontrun{
@@ -385,7 +382,7 @@ api_config <- daycent_runner_config(
   backend = "api",
   base_url = Sys.getenv("EMDC_BACKEND_SERVER", "https://api.emdc.eco"),
   api_key = Sys.getenv("EMDC_API_KEY"),
-  product_id = Sys.getenv("EMDC_DAYCENT_PRODUCT_ID"),
+  model_name = "DayCent", model_version = "491",
   verify_ssl = TRUE, poll_seconds = 60
 )
 completed <- DayCentRunSite(

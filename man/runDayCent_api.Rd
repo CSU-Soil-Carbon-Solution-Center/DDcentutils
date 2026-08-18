@@ -15,7 +15,9 @@ runDayCent_api(
   keep_zip = FALSE,
   timeout_seconds = 3600,
   output_zip = NULL,
-  overwrite = FALSE
+  overwrite = FALSE,
+  dry_run = FALSE,
+  dry_run_mode = "Full"
 )
 }
 \arguments{
@@ -43,11 +45,16 @@ exposes one \code{runEquilibrium} field rather than an independent base flag.}
 \item{output_zip}{Optional result ZIP destination.}
 
 \item{overwrite}{Logical. Allow existing result ZIPs and outputs to be replaced.}
+
+\item{dry_run}{Logical. Submit preflight validation without creating a run.}
+
+\item{dry_run_mode}{Optional API mode: \code{Full}, \code{CreditCostOnly}, or \code{InputQcOnly}.}
 }
 \value{
-With \code{wait = FALSE}, submission information containing \code{run_id}.
-With \code{wait = TRUE}, a list containing submission, terminal status, and
-extracted result paths.
+With \code{dry_run = TRUE}, preflight evidence with no \code{run_id}.
+Otherwise, with \code{wait = FALSE}, submission information containing
+\code{run_id}; with \code{wait = TRUE}, a list containing submission, terminal
+status, and extracted result paths.
 }
 \description{
 Stages one or more exact \code{site/scenario} selections, submits one ModelRuns

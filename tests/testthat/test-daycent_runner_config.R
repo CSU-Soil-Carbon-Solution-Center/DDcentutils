@@ -8,7 +8,7 @@ test_that("exe configuration does not require API credentials", {
   expect_equal(cfg$model_name, "DayCent")
   expect_equal(cfg$model_version, "491")
   expect_null(cfg$api_key)
-  expect_null(cfg$product_id)
+  expect_false("product_id" %in% names(cfg))
 })
 
 test_that("exe configuration validates requested paths", {
@@ -33,7 +33,7 @@ test_that("api configuration requires a key but uses model identity defaults", {
 
   cfg <- daycent_runner_config(backend = "api", api_key = "secret-value")
   expect_equal(cfg$api_key, "secret-value")
-  expect_null(cfg$product_id)
+  expect_false("product_id" %in% names(cfg))
   expect_equal(cfg$model_name, "DayCent")
   expect_equal(cfg$model_version, "491")
 

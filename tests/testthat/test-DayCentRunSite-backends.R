@@ -26,7 +26,8 @@ test_that("DayCentRunSite keeps the existing executable route by default", {
 })
 
 test_that("DayCentRunSite routes API options without local validation", {
-  config <- list(backend = "api", api_key = "secret", product_id = "product")
+  config <- list(backend = "api", api_key = "secret", model_name = "DayCent", model_version = "491",
+                 .__daycent_product_id = "product")
   captured <- NULL
   testthat::local_mocked_bindings(
     runDayCent_api = function(...) {
@@ -56,7 +57,8 @@ test_that("DayCentRunSite routes API options without local validation", {
 })
 
 test_that("DayCentRunSite rejects invalid backend combinations before routing", {
-  config <- list(backend = "api", api_key = "secret", product_id = "product")
+  config <- list(backend = "api", api_key = "secret", model_name = "DayCent", model_version = "491",
+                 .__daycent_product_id = "product")
   called <- FALSE
   testthat::local_mocked_bindings(
     runDayCent_api = function(...) { called <<- TRUE },

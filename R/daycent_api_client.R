@@ -23,12 +23,82 @@
 
 .daycent_validate_api_config <- function(config) {
   api_key <- .daycent_config_value(config, "api_key", "")
-  product_id <- .daycent_config_value(config, "product_id", "")
   if (!is.character(api_key) || length(api_key) != 1L || is.na(api_key) || !nzchar(api_key)) {
     stop("API submission requires config$api_key.", call. = FALSE)
   }
-  if (!is.character(product_id) || length(product_id) != 1L || is.na(product_id) || !nzchar(product_id)) {
-    stop("API submission requires config$product_id for the ModelRuns endpoint.", call. = FALSE)
+  model_name <- .daycent_config_value(config, "model_name", "")
+  model_version <- .daycent_config_value(config, "model_version", "")
+  legacy_identity <- .daycent_config_value(config, "product_id", "")
+  if ((!is.character(model_name) || length(model_name) != 1L || is.na(model_name) || !nzchar(model_name) ||
+       !is.character(model_version) || length(model_version) != 1L || is.na(model_version) || !nzchar(model_version)) &&
+      (!is.character(legacy_identity) || length(legacy_identity) != 1L || is.na(legacy_identity) || !nzchar(legacy_identity))) {
+    stop("API submission requires config$model_name and config$model_version.", call. = FALSE)
+  }
+  invisible(TRUE)
+}
+
+.daycent_require_model_identity <- function(config) {
+  for (field in c("model_name", "model_version")) {
+    value <- .daycent_config_value(config, field, "")
+    if (!is.character(value) || length(value) != 1L || is.na(value) || !nzchar(value)) {
+      stop(sprintf("API submission requires config$%s.", field), call. = FALSE)
+    }
+  }
+  invisible(TRUE)
+}
+
+.daycent_with_product <- function(config) {
+  resolved <- .daycent_config_value(config, ".__daycent_product_id", "")
+  if (is.character(resolved) && length(resolved) == 1L && !is.na(resolved) && nzchar(resolved)) {
+    return(config)
+  }
+  config[[".__daycent_product_id"]] <- .daycent_resolve_product(config)
+  config
+}
+
+.daycent_resolve_product <- function(config) {
+  .daycent_validate_api_config(config)
+  .daycent_require_model_identity(config)
+  model_name <- config$model_name
+  model_version <- config$model_version
+  url <- .daycent_url(config, paste0("/api/Products/getByName?name=",
+                                     utils::URLencode(model_name, reserved = TRUE)))
+  response <- .daycent_http_request(
+    "GET", url, headers = list(`X-Api-Key` = config$api_key),
+    verify_ssl = .daycent_config_value(config, "verify_ssl", TRUE)
+  )
+  if (response$status_code < 200L || response$status_code >= 300L) {
+    stop(sprintf("Product lookup failed with HTTP %s.", response$status_code), call. = FALSE)
+  }
+  body <- response$body
+  products <- if (is.list(body) && !is.null(body$items)) body$items else
+    if (is.list(body) && !is.null(body$products)) body$products else
+      if (is.list(body) && !is.null(body$value)) body$value else body
+  if (is.list(products) && !is.null(products$id)) products <- list(products)
+  if (!is.list(products) || !length(products)) {
+    stop("Product lookup returned no usable products.", call. = FALSE)
+  }
+  matches <- Filter(function(product) {
+    if (!is.list(product)) return(FALSE)
+    identical(as.character(.daycent_first(product$name, product$modelName) %||% ""), model_name) &&
+      identical(as.character(.daycent_first(product$version, product$modelVersion) %||% ""), model_version)
+  }, products)
+  if (!length(matches)) stop("Product lookup found no exact model name/version match.", call. = FALSE)
+  if (length(matches) != 1L) stop("Product lookup found multiple exact model name/version matches.", call. = FALSE)
+  product_id <- .daycent_first(matches[[1L]]$id, matches[[1L]]$productId)
+  if (is.null(product_id) || length(product_id) != 1L || is.na(product_id) || !nzchar(as.character(product_id))) {
+    stop("Product lookup response did not contain a usable product identifier.", call. = FALSE)
+  }
+  as.character(product_id)
+}
+
+.daycent_validate_dry_run <- function(dry_run, dry_run_mode) {
+  if (!is.null(dry_run) && (length(dry_run) != 1L || !is.logical(dry_run) || is.na(dry_run))) {
+    stop("dry_run must be NULL or a single TRUE/FALSE value.", call. = FALSE)
+  }
+  if (!is.null(dry_run_mode) && (!is.character(dry_run_mode) || length(dry_run_mode) != 1L ||
+                                  is.na(dry_run_mode) || !(dry_run_mode %in% c("Full", "CreditCostOnly", "InputQcOnly")))) {
+    stop("dry_run_mode must be one of Full, CreditCostOnly, or InputQcOnly.", call. = FALSE)
   }
   invisible(TRUE)
 }
@@ -62,7 +132,7 @@
   run_id <- .daycent_first(run[["id"]], run[["runId"]], run[["modelRunId"]],
                            body[["runId"]], body[["modelRunId"]])
   if (is.null(run_id) || !nzchar(as.character(run_id))) {
-    stop(sprintf("ModelRuns response did not contain a run ID: %s", raw_text), call. = FALSE)
+    stop("ModelRuns response did not contain a run ID.", call. = FALSE)
   }
   list(
     run_id = as.character(run_id[[1L]]),
@@ -73,6 +143,23 @@
       run[["childStatusCounts"]], run[["batchChildStatusCounts"]], run[["childrenByStatus"]],
       body[["childStatusCounts"]], body[["batchChildStatusCounts"]]
     ),
+    raw = body
+  )
+}
+
+.daycent_parse_dry_run <- function(body, config) {
+  if (!is.list(body)) stop("Malformed dry-run response: expected an object.", call. = FALSE)
+  preflight <- body$preflight
+  if (!is.list(preflight)) stop("Malformed dry-run response: missing preflight results.", call. = FALSE)
+  list(
+    dry_run = TRUE,
+    passed = preflight$passed,
+    input_qc = preflight$inputQc,
+    credit_cost = preflight$creditCost,
+    prepare_run = preflight$prepareRun,
+    model_name = config$model_name,
+    model_version = config$model_version,
+    preflight_version = preflight$preflightVersion,
     raw = body
   )
 }
@@ -96,7 +183,7 @@
                             dry_run, dry_run_mode) {
   fields <- list(
     inputZip = httr::upload_file(input_zip, type = "application/zip"),
-    productId = config$product_id,
+    productId = config[[".__daycent_product_id"]],
     name = name,
     runEquilibrium = tolower(as.character(run_eq))
   )
@@ -112,7 +199,7 @@
 #' Submit a DayCent ModelRuns request
 #'
 #' @param config A configuration list from [daycent_runner_config()]. Its API
-#'   key and product ID are required for submission.
+#'   key and model name/version are required for submission.
 #' @param input_zip Path to an existing ZIP archive.
 #' @param include Character vector of site/scenario selectors. `NULL`, empty,
 #'   or `"*"` lets the API select all discovered pairs.
@@ -133,6 +220,7 @@ submit_daycent_run <- function(config, input_zip, include = NULL, run_eq = FALSE
                                scenario_name = NULL, organization_membership_id = NULL,
                                dry_run = NULL, dry_run_mode = NULL, wait = FALSE) {
   .daycent_validate_api_config(config)
+  .daycent_validate_dry_run(dry_run, dry_run_mode)
   if (!is.character(input_zip) || length(input_zip) != 1L || !file.exists(input_zip)) {
     stop("input_zip must name an existing ZIP file.", call. = FALSE)
   }
@@ -140,6 +228,7 @@ submit_daycent_run <- function(config, input_zip, include = NULL, run_eq = FALSE
     stop("run_eq must be a single TRUE or FALSE value.", call. = FALSE)
   }
   include <- .daycent_include(include)
+  config <- .daycent_with_product(config)
   fields <- .daycent_fields(input_zip, config, include, run_eq, name,
                             site_name, scenario_name, organization_membership_id,
                             dry_run, dry_run_mode)
@@ -151,7 +240,9 @@ submit_daycent_run <- function(config, input_zip, include = NULL, run_eq = FALSE
   if (response$status_code < 200L || response$status_code >= 300L) {
     stop(paste("DayCent submission failed:", .daycent_response_error(response, config$api_key)), call. = FALSE)
   }
-  result <- .daycent_parse_run(response$body, response$text)
+  result <- if (isTRUE(dry_run)) .daycent_parse_dry_run(response$body, config) else
+    .daycent_parse_run(response$body, response$text)
+  if (isTRUE(dry_run)) return(result)
   if (isTRUE(wait)) {
     return(watch_daycent_run(config, result$run_id))
   }
