@@ -15,7 +15,8 @@ make_batch_project_api <- function() {
 test_that("API batch submits once and returns resumable parent metadata", {
   project <- make_batch_project_api()
   on.exit(unlink(project, recursive = TRUE), add = TRUE)
-  config <- list(backend = "api", api_key = "secret", product_id = "product")
+  config <- list(backend = "api", api_key = "secret", model_name = "DayCent", model_version = "491",
+                 .__daycent_product_id = "product")
   captured <- list()
   testthat::local_mocked_bindings(
     runDayCent_api = function(include, run_eq, run_base, config, project_path,
@@ -42,7 +43,8 @@ test_that("API batch submits once and returns resumable parent metadata", {
 test_that("API batch maps child records without inferring from parent status", {
   project <- make_batch_project_api()
   on.exit(unlink(project, recursive = TRUE), add = TRUE)
-  config <- list(backend = "api", api_key = "secret", product_id = "product")
+  config <- list(backend = "api", api_key = "secret", model_name = "DayCent", model_version = "491",
+                 .__daycent_product_id = "product")
   testthat::local_mocked_bindings(
     runDayCent_api = function(...) list(
       run_id = "parent-2", status = list(status = "Completed"), results = list()
@@ -66,9 +68,9 @@ test_that("API batch maps child records without inferring from parent status", {
   expect_equal(result$task_table$child_run_id, c("child-1", "child-2", "child-3"))
 })
 
-test_that("API batch requires product_id before orchestration", {
+test_that("API batch requires model identity before orchestration", {
   project <- make_batch_project_api()
   on.exit(unlink(project, recursive = TRUE), add = TRUE)
   expect_error(runDayCent_batch(project, backend = "api",
-                                config = list(api_key = "secret")), "product_id")
+                                config = list(api_key = "secret")), "model_name")
 })

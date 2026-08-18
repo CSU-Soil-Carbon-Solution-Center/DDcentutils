@@ -19,6 +19,9 @@
 #' @param timeout_seconds Maximum status-watch duration in seconds.
 #' @param output_zip Optional result ZIP destination.
 #' @param overwrite Logical. Allow existing result ZIPs and outputs to be replaced.
+#' @param dry_run Logical. Submit preflight validation without creating a run.
+#' @param dry_run_mode Optional API mode: `Full`, `CreditCostOnly`, or
+#'   `InputQcOnly`.
 #'
 #' @return With `wait = FALSE`, submission information containing `run_id`.
 #'   With `wait = TRUE`, a list containing submission, terminal status, and
@@ -28,8 +31,10 @@ runDayCent_api <- function(include = NULL, run_eq = FALSE, run_base = run_eq, co
                            project_path = ".", name = "daycent-r-api-run",
                            wait = TRUE, keep_zip = FALSE,
                            timeout_seconds = 3600, output_zip = NULL,
-                           overwrite = FALSE) {
+                           overwrite = FALSE, dry_run = FALSE,
+                           dry_run_mode = "Full") {
   .daycent_validate_api_config(config)
+  .daycent_validate_dry_run(dry_run, dry_run_mode)
   if (!is.null(config$backend) && !identical(config$backend, "api")) {
     stop("runDayCent_api requires an API runner configuration.", call. = FALSE)
   }
@@ -55,20 +60,25 @@ runDayCent_api <- function(include = NULL, run_eq = FALSE, run_base = run_eq, co
     stop("project_path must name an existing project directory.", call. = FALSE)
   }
 
+  resolved_config <- .daycent_with_product(config)
   input_zip <- tempfile("daycent-inputs-", fileext = ".zip")
   on.exit(unlink(input_zip, force = TRUE), add = TRUE)
   zip_daycent_inputs(project_path, include = include, run_eq = run_eq,
                      out_zip = input_zip)
   submission <- submit_daycent_run(
-    config = config, input_zip = input_zip, include = include,
-    run_eq = run_eq, name = name, wait = FALSE
+    config = resolved_config, input_zip = input_zip, include = include,
+    run_eq = run_eq, name = name,
+    dry_run = if (isTRUE(dry_run)) TRUE else NULL,
+    dry_run_mode = if (isTRUE(dry_run)) dry_run_mode else NULL,
+    wait = FALSE
   )
+  if (isTRUE(dry_run)) return(submission)
   if (!isTRUE(wait)) return(submission)
 
-  status <- watch_daycent_run(config, submission$run_id,
+  status <- watch_daycent_run(resolved_config, submission$run_id,
                               timeout_seconds = timeout_seconds)
   results <- download_daycent_results(
-    config, submission$run_id, project_path, keep_zip = keep_zip,
+    resolved_config, submission$run_id, project_path, keep_zip = keep_zip,
     output_zip = output_zip, overwrite = overwrite
   )
   list(run_id = submission$run_id, submission = submission,

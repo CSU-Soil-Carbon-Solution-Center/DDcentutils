@@ -2,7 +2,8 @@ test_that("runDayCent_api composes multi-pair staging, submission, watching, and
   project <- tempfile("daycent-project-")
   dir.create(project)
   on.exit(unlink(project, recursive = TRUE), add = TRUE)
-  config <- list(backend = "api", api_key = "secret", product_id = "product")
+  config <- list(backend = "api", api_key = "secret", model_name = "DayCent",
+                 model_version = "491", .__daycent_product_id = "product")
   calls <- list()
 
   testthat::local_mocked_bindings(
@@ -12,7 +13,7 @@ test_that("runDayCent_api composes multi-pair staging, submission, watching, and
       file.create(out_zip)
       invisible(out_zip)
     },
-    submit_daycent_run = function(config, input_zip, include, run_eq, name, wait) {
+    submit_daycent_run = function(config, input_zip, include, run_eq, name, ..., wait) {
       calls$submit <<- list(input_zip = input_zip, include = include,
                            run_eq = run_eq, name = name, wait = wait)
       list(run_id = "run-12", status = "Queued")
@@ -55,7 +56,8 @@ test_that("runDayCent_api wait false returns resumable submission", {
   project <- tempfile("daycent-project-")
   dir.create(project)
   on.exit(unlink(project, recursive = TRUE), add = TRUE)
-  config <- list(backend = "api", api_key = "secret", product_id = "product")
+  config <- list(backend = "api", api_key = "secret", model_name = "DayCent",
+                 model_version = "491", .__daycent_product_id = "product")
   watched <- FALSE
 
   testthat::local_mocked_bindings(
@@ -86,18 +88,46 @@ test_that("runDayCent_api validates before staging", {
 
   expect_error(runDayCent_api("siteA/scenario1",
                               config = list(backend = "api", api_key = "secret"),
-                              project_path = project), "product_id")
+                              project_path = project), "model_name")
   expect_error(runDayCent_api("siteA/eq",
                               config = list(backend = "api", api_key = "secret",
-                                            product_id = "product"),
+                                            model_name = "DayCent", model_version = "491"),
                               project_path = project), "run_eq")
   expect_error(runDayCent_api("siteA/scenario1", run_base = TRUE,
                               config = list(backend = "api", api_key = "secret",
-                                            product_id = "product"),
+                                            model_name = "DayCent", model_version = "491"),
                               project_path = project), "require.*match")
   expect_error(runDayCent_api("siteA/scenario1",
                               config = list(backend = "exe", api_key = "secret",
-                                            product_id = "product"),
+                                            model_name = "DayCent", model_version = "491"),
                               project_path = project), "API runner configuration")
   expect_false(staged)
+})
+
+test_that("runDayCent_api dry run stages and submits once without watching or downloading", {
+  project <- tempfile("daycent-project-")
+  dir.create(project)
+  on.exit(unlink(project, recursive = TRUE), add = TRUE)
+  config <- list(backend = "api", api_key = "secret", model_name = "DayCent",
+                 model_version = "491", .__daycent_product_id = "product")
+  calls <- list(zip = 0L, submit = 0L, watch = 0L, download = 0L)
+  testthat::local_mocked_bindings(
+    zip_daycent_inputs = function(project_path, include, run_eq, out_zip) {
+      calls$zip <<- calls$zip + 1L
+      file.create(out_zip)
+      invisible(out_zip)
+    },
+    submit_daycent_run = function(...) {
+      calls$submit <<- calls$submit + 1L
+      list(dry_run = TRUE, passed = TRUE)
+    },
+    watch_daycent_run = function(...) calls$watch <<- calls$watch + 1L,
+    download_daycent_results = function(...) calls$download <<- calls$download + 1L,
+    .package = "DDcentutils"
+  )
+  result <- runDayCent_api("siteA/scenario1", config = config,
+                           project_path = project, dry_run = TRUE,
+                           dry_run_mode = "Full")
+  expect_true(result$dry_run)
+  expect_equal(calls, list(zip = 1L, submit = 1L, watch = 0L, download = 0L))
 })
